@@ -1,0 +1,50 @@
+<Stack direction="row" justifyContent="center" spacing={1}>
+          <Button
+            variant="outlined"
+            onClick={() =>
+              postAppAction({ data: { trials: '15' }, type: 'an-action' })
+            }
+          >
+            Post new App Action
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() =>
+              postAppData({ data: { content: 'hello' }, type: 'a-type' })
+            }
+          >
+            Post new App Data
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              const data = appData?.at(-1);
+              patchAppData({
+                id: data?.id || '',
+                data: { content: `${data?.data.content}-` },
+              });
+            }}
+          >
+            Patch last App Data
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => deleteAppData({ id: appData?.at(-1)?.id || '' })}
+          >
+            Delete last App Data
+          </Button>
+        </Stack>
+
+const AppSettingsDisplay = (): JSX.Element => {
+    const { data: appSettings } = hooks.useAppSettings();
+    return (
+      <Box p={2}>
+        <Typography>App Setting</Typography>
+        {appSettings ? (
+          <pre>{JSON.stringify(appSettings, null, 2)}</pre>
+        ) : (
+          <Typography>Loading</Typography>
+        )}
+      </Box>
+    );
+  };

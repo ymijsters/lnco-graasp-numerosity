@@ -1,22 +1,41 @@
-import { Box, Typography } from '@mui/material';
+import { useCallback } from 'react';
 
-import { useLocalContext } from '@graasp/apps-query-client';
+import { DataCollection } from 'jspsych';
 
-import { hooks } from '@/config/queryClient';
+import { hooks, mutations } from '@/config/queryClient';
 import { PLAYER_VIEW_CY } from '@/config/selectors';
 
+import { Experiment } from '../experiment/Experiment-Component';
+
 const PlayerView = (): JSX.Element => {
-  const { permission } = useLocalContext();
-  const { data: appContext } = hooks.useAppContext();
-  const members = appContext?.members;
+  const appSettings = hooks.useAppSettings();
+  const { mutate: postAppData } = mutations.usePostAppData();
+
+  let trialsPerHalfSetting = 1;
+  appSettings.data?.forEach((setting) => {
+    // eslint-disable-next-line
+    console.log(setting);
+    if ('trials' in setting.data) {
+      trialsPerHalfSetting = Number(setting.data.trials);
+    }
+  });
+
+  const onCompleteExperiment = useCallback(
+    (trialsPerHalf: number, rawData: DataCollection): void => {
+      postAppData({
+        data: { trialsPerHalf, rawData },
+        type: 'a-type',
+      });
+    },
+    [postAppData],
+  );
 
   return (
-    <div data-cy={PLAYER_VIEW_CY}>
-      Player as {permission}
-      <Box p={2}>
-        <Typography>Members</Typography>
-        <pre>{JSON.stringify(members, null, 2)}</pre>
-      </Box>
+    <div data-cy={PLAYER_VIEW_CY} style={{ height: '800px' }}>
+      <Experiment
+        trialsPerHalf={trialsPerHalfSetting}
+        onCompleteExperiment={onCompleteExperiment}
+      />
     </div>
   );
 };

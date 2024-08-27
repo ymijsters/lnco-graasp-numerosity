@@ -1652,7 +1652,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
   version: 7.25.0
   resolution: "@babel/runtime@npm:7.25.0"
   dependencies:
@@ -2786,6 +2786,69 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jspsych/plugin-fullscreen@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-fullscreen@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.1.0"
+  checksum: 10/1bbdf3c6c42224339ed7923faa41654da0c9d4e7e5a034695531f16b063323f719b346727255770075be8a54ffe4292b1c58f9af21de318b56c7e49a5c6de8bb
+  languageName: node
+  linkType: hard
+
+"@jspsych/plugin-html-button-response@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-html-button-response@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.1.0"
+  checksum: 10/1fb5080db4c3ed07c44e0339e631ae7392c080a546e4df7e8e7d1237f3477e8c4141330959bb196b93bd87e0e0f4eab594a8811e5e5de19b2c46fbc22636df18
+  languageName: node
+  linkType: hard
+
+"@jspsych/plugin-html-keyboard-response@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-html-keyboard-response@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.1.0"
+  checksum: 10/62ac6dd05cee651536cfb75eed7dc7a9f2858770bc69002d635a48b0a166e326c9fd6389d001a34c644a65cb96af8ff4dc55f0dd778858f21859b76a911391c3
+  languageName: node
+  linkType: hard
+
+"@jspsych/plugin-instructions@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-instructions@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.1.0"
+  checksum: 10/b846f1847adf50e5d6c580ccf24aafa025d6802ba6390e678b8f05ddfc60a58fa8eebfc8d06382f54675fb9638c9666ab681379c830777e19f8078986733b530
+  languageName: node
+  linkType: hard
+
+"@jspsych/plugin-preload@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-preload@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.1.0"
+  checksum: 10/c41d3f7bb1741851768e772fa6a43b7b0b6a8b439514552ed9629e2285207637535f200abdc3dd0cde6cb0b512ad6de0736a94a3560e7e5a990024c6ec2eb2df
+  languageName: node
+  linkType: hard
+
+"@jspsych/plugin-survey-html-form@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-survey-html-form@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.1.0"
+  checksum: 10/5671a2a28f74c64dda28ae33e9462e2e39a2a54b1c06701605a31d0c04fcc595b28c031b0bb1d5c85303ed40e6099f31ed51a131e1c1959055de679cb61203f6
+  languageName: node
+  linkType: hard
+
+"@jspsych/plugin-survey-multi-choice@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-survey-multi-choice@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.1.0"
+  checksum: 10/5c15d3a5623a60d0c9a57edfd70a6bef9ecd6fcf99f618f75feb5cff501f66a15f3af79ef7b2ad3d997dd6435046cbb0ed855e760a46059da2ec3f25abf87ff2
+  languageName: node
+  linkType: hard
+
 "@miragejs/pretender-node-polyfill@npm:^0.1.0":
   version: 0.1.2
   resolution: "@miragejs/pretender-node-polyfill@npm:0.1.2"
@@ -2880,7 +2943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/lab@npm:5.0.0-alpha.173":
+"@mui/lab@npm:^5.0.0-alpha.173":
   version: 5.0.0-alpha.173
   resolution: "@mui/lab@npm:5.0.0-alpha.173"
   dependencies:
@@ -4423,6 +4486,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@unly/iso3166-1@npm:1.0.2":
+  version: 1.0.2
+  resolution: "@unly/iso3166-1@npm:1.0.2"
+  checksum: 10/36eded56c962910640c8ea02bcaacac62625c16f0f4908a0800868774059026bed97d77c6152f0f55b57f22d04f961f7f046d4772c7be634b8a72bb7571d87b5
+  languageName: node
+  linkType: hard
+
+"@unly/universal-language-detector@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@unly/universal-language-detector@npm:2.0.3"
+  dependencies:
+    "@unly/iso3166-1": "npm:1.0.2"
+    "@unly/utils": "npm:1.0.3"
+    accept-language-parser: "npm:1.5.0"
+    i18next: "npm:19.0.2"
+    i18next-browser-languagedetector: "npm:4.0.1"
+    lodash.get: "npm:4.4.2"
+    lodash.includes: "npm:4.3.0"
+  checksum: 10/db265661c272b6e1c9482b181cac423e876548ea944aa193258a2d72493256eb488f784e135e0277723573dea5ce7394f044caecb350923fe2a518283c257f9b
+  languageName: node
+  linkType: hard
+
+"@unly/utils@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@unly/utils@npm:1.0.3"
+  checksum: 10/cd8498912f9015836008497d4c20ca53a1a9c5c7d35e9877411eec34273282004ee516c4c5384c2bae3aacc089e49349ccf087f3c6924f751a5cbb5c1e2bf1cf
+  languageName: node
+  linkType: hard
+
 "@vitejs/plugin-react@npm:^3.0.1":
   version: 3.1.0
   resolution: "@vitejs/plugin-react@npm:3.1.0"
@@ -4537,6 +4629,13 @@ __metadata:
   version: 2.0.0
   resolution: "abbrev@npm:2.0.0"
   checksum: 10/ca0a54e35bea4ece0ecb68a47b312e1a9a6f772408d5bcb9051230aaa94b0460671c5b5c9cb3240eb5b7bc94c52476550eb221f65a0bbd0145bdc9f3113a6707
+  languageName: node
+  linkType: hard
+
+"accept-language-parser@npm:1.5.0":
+  version: 1.5.0
+  resolution: "accept-language-parser@npm:1.5.0"
+  checksum: 10/9d8dd3e2db701ee4de4a68b77e05c0413e234d37311c9f7784c309228871e8317389d20c6f2317fb95d5c3529c2de5add4850c88b2253c6fa9079e4c660ec3c8
   languageName: node
   linkType: hard
 
@@ -4966,6 +5065,13 @@ __metadata:
   version: 1.0.0
   resolution: "at-least-node@npm:1.0.0"
   checksum: 10/463e2f8e43384f1afb54bc68485c436d7622acec08b6fad269b421cb1d29cebb5af751426793d0961ed243146fe4dc983402f6d5a51b720b277818dbf6f2e49e
+  languageName: node
+  linkType: hard
+
+"auto-bind@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "auto-bind@npm:4.0.0"
+  checksum: 10/00cad71cce5742faccb7dd65c1b55ebc4f45add4b0c9a1547b10b05bab22813230133b0c892c67ba3eb969a4524710c5e43cc45c72898ec84e56f3a596e7a04f
   languageName: node
   linkType: hard
 
@@ -5416,7 +5522,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.4.2, chokidar@npm:^3.5.1, chokidar@npm:^3.6.0":
+"chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.4.2, chokidar@npm:^3.5.1, chokidar@npm:^3.6.0":
   version: 3.6.0
   resolution: "chokidar@npm:3.6.0"
   dependencies:
@@ -8013,8 +8119,15 @@ __metadata:
     "@graasp/apps-query-client": "npm:3.4.15"
     "@graasp/sdk": "npm:4.9.0"
     "@graasp/ui": "npm:4.17.1"
+    "@jspsych/plugin-fullscreen": "npm:^2.0.0"
+    "@jspsych/plugin-html-button-response": "npm:^2.0.0"
+    "@jspsych/plugin-html-keyboard-response": "npm:^2.0.0"
+    "@jspsych/plugin-instructions": "npm:^2.0.0"
+    "@jspsych/plugin-preload": "npm:^2.0.0"
+    "@jspsych/plugin-survey-html-form": "npm:^2.0.0"
+    "@jspsych/plugin-survey-multi-choice": "npm:^2.0.0"
     "@mui/icons-material": "npm:5.15.21"
-    "@mui/lab": "npm:5.0.0-alpha.173"
+    "@mui/lab": "npm:^5.0.0-alpha.173"
     "@mui/material": "npm:5.15.21"
     "@sentry/react": "npm:7.118.0"
     "@tanstack/react-query": "npm:^4.36.1"
@@ -8027,6 +8140,7 @@ __metadata:
     "@types/uuid": "npm:9.0.8"
     "@typescript-eslint/eslint-plugin": "npm:7.18.0"
     "@typescript-eslint/parser": "npm:7.18.0"
+    "@unly/universal-language-detector": "npm:^2.0.3"
     "@vitejs/plugin-react": "npm:^4.2.1"
     axios: "npm:1.7.3"
     concurrently: "npm:8.2.2"
@@ -8046,6 +8160,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:4.6.2"
     husky: "npm:9.1.4"
     i18next: "npm:^23.9.0"
+    jspsych: "npm:^8.0.2"
     miragejs: "npm:^0.1.48"
     nock: "npm:^13.5.3"
     nyc: "npm:15.1.0"
@@ -8054,6 +8169,7 @@ __metadata:
     react-dom: "npm:18.3.1"
     react-i18next: "npm:14.1.3"
     react-toastify: "npm:10.0.5"
+    sass: "npm:^1.77.8"
     typescript: "npm:5.4.5"
     uuid: "npm:9.0.1"
     vite: "npm:^5.1.3"
@@ -8293,6 +8409,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18next-browser-languagedetector@npm:4.0.1":
+  version: 4.0.1
+  resolution: "i18next-browser-languagedetector@npm:4.0.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.5.5"
+  checksum: 10/67fd8198383eb617b05f25fdcd2904fcae0fac1443a033557f602a572deeda4314bfcdf4d1083384680ee39b8a284299fd1b585102f7ae1113077a550295fd8c
+  languageName: node
+  linkType: hard
+
+"i18next@npm:19.0.2":
+  version: 19.0.2
+  resolution: "i18next@npm:19.0.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.3.1"
+  checksum: 10/d47ea6df7a413f8bcebde3ddbd0f8e9ca1e5a02259455653676060d9f176056b933ce636fe813491f7be798276df95c2c4d49f4a256cbfa2f9e31e388ad80673
+  languageName: node
+  linkType: hard
+
 "i18next@npm:^23.9.0":
   version: 23.12.2
   resolution: "i18next@npm:23.12.2"
@@ -8338,6 +8472,13 @@ __metadata:
   version: 3.0.6
   resolution: "immediate@npm:3.0.6"
   checksum: 10/f9b3486477555997657f70318cc8d3416159f208bec4cca3ff3442fd266bc23f50f0c9bd8547e1371a6b5e82b821ec9a7044a4f7b944798b25aa3cc6d5e63e62
+  languageName: node
+  linkType: hard
+
+"immutable@npm:^4.0.0":
+  version: 4.3.7
+  resolution: "immutable@npm:4.3.7"
+  checksum: 10/37d963c5050f03ae5f3714ba7a43d469aa482051087f4c65d673d1501c309ea231d87480c792e19fa85e2eaf965f76af5d0aa92726505f3cfe4af91619dfb80b
   languageName: node
   linkType: hard
 
@@ -9192,6 +9333,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jspsych@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "jspsych@npm:8.0.2"
+  dependencies:
+    auto-bind: "npm:^4.0.0"
+    random-words: "npm:^1.1.1"
+    seedrandom: "npm:^3.0.5"
+    type-fest: "npm:^2.9.0"
+  checksum: 10/b306a56efefcc6f2c9f9a918e91450bf64cd0f73b4543f143e5cbec26efae1c73665a7817ba2ed610214d25020c13bc8506db8fbbf5b82cf20e78daf9531ef3e
+  languageName: node
+  linkType: hard
+
 "jsx-ast-utils@npm:^2.4.1 || ^3.0.0, jsx-ast-utils@npm:^3.3.5":
   version: 3.3.5
   resolution: "jsx-ast-utils@npm:3.3.5"
@@ -9369,6 +9522,20 @@ __metadata:
   version: 4.4.0
   resolution: "lodash.flattendeep@npm:4.4.0"
   checksum: 10/0d0b41d8d86999e8bea94905ac65347404d427aacddbc6654dc2f85905e27cd2b708139671ecea135fa6f0a17ed94b9d4cab8ce12b08eddcbb1ddd83952ee4c2
+  languageName: node
+  linkType: hard
+
+"lodash.get@npm:4.4.2":
+  version: 4.4.2
+  resolution: "lodash.get@npm:4.4.2"
+  checksum: 10/2a4925f6e89bc2c010a77a802d1ba357e17ed1ea03c2ddf6a146429f2856a216663e694a6aa3549a318cbbba3fd8b7decb392db457e6ac0b83dc745ed0a17380
+  languageName: node
+  linkType: hard
+
+"lodash.includes@npm:4.3.0":
+  version: 4.3.0
+  resolution: "lodash.includes@npm:4.3.0"
+  checksum: 10/45e0a7c7838c931732cbfede6327da321b2b10482d5063ed21c020fa72b09ca3a4aa3bda4073906ab3f436cf36eb85a52ea3f08b7bab1e0baca8235b0e08fe51
   languageName: node
   linkType: hard
 
@@ -10780,6 +10947,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"random-words@npm:^1.1.1":
+  version: 1.3.0
+  resolution: "random-words@npm:1.3.0"
+  dependencies:
+    seedrandom: "npm:^3.0.5"
+  checksum: 10/d2e2b93d898e69db74d7b79c9e8270ba689d1d4933e40b4c166e84a3651378c3f97d858083203470e05c474e9e5cf1116b3e215bb84e4a78e4ecb7a286c7b518
+  languageName: node
+  linkType: hard
+
 "range-parser@npm:~1.2.1":
   version: 1.2.1
   resolution: "range-parser@npm:1.2.1"
@@ -11440,12 +11616,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sass@npm:^1.77.8":
+  version: 1.77.8
+  resolution: "sass@npm:1.77.8"
+  dependencies:
+    chokidar: "npm:>=3.0.0 <4.0.0"
+    immutable: "npm:^4.0.0"
+    source-map-js: "npm:>=0.6.2 <2.0.0"
+  bin:
+    sass: sass.js
+  checksum: 10/4bf6e3007fef62dd6dfc657c89c2890872a6b5dc43e2dc4d61bcf9ae1bdc2dd95b59454a3cbd3c8363c98b673b028e1578b26135190d0f2a8a184a38ab41e99b
+  languageName: node
+  linkType: hard
+
 "scheduler@npm:^0.23.2":
   version: 0.23.2
   resolution: "scheduler@npm:0.23.2"
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10/e8d68b89d18d5b028223edf090092846868a765a591944760942b77ea1f69b17235f7e956696efbb62c8130ab90af7e0949bfb8eba7896335507317236966bc9
+  languageName: node
+  linkType: hard
+
+"seedrandom@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "seedrandom@npm:3.0.5"
+  checksum: 10/acad5e516c04289f61c2fb9848f449b95f58362b75406b79ec51e101ec885293fc57e3675d2f39f49716336559d7190f7273415d185fead8cd27b171ebf7d8fb
   languageName: node
   linkType: hard
 
@@ -11660,7 +11856,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.2.0":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.2.0":
   version: 1.2.0
   resolution: "source-map-js@npm:1.2.0"
   checksum: 10/74f331cfd2d121c50790c8dd6d3c9de6be21926de80583b23b37029b0f37aefc3e019fa91f9a10a5e120c08135297e1ecf312d561459c45908cb1e0e365f49e5
@@ -12333,7 +12529,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^2.19.0, type-fest@npm:~2.19":
+"type-fest@npm:^2.19.0, type-fest@npm:^2.9.0, type-fest@npm:~2.19":
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: 10/7bf9e8fdf34f92c8bb364c0af14ca875fac7e0183f2985498b77be129dc1b3b1ad0a6b3281580f19e48c6105c037fb966ad9934520c69c6434d17fd0af4eed78
