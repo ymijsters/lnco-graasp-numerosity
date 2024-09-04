@@ -13,6 +13,8 @@ import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 import i18next from 'i18next';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
+import { AllSettingsType } from '@/modules/context/SettingsContext';
+
 // Import styles
 import { groupInstructions, tipScreen } from './instructions';
 import { showEndScreen } from './quit';
@@ -264,14 +266,14 @@ export async function run({
   onFinish,
 }: {
   assetPaths: { images: string[]; audio: string[]; video: string[] };
-  input: { trialsPerHalf?: number };
+  input: AllSettingsType;
   environment: string;
   title: string;
   version: string;
-  onFinish: (data: DataCollection, blocksPerHalf: number) => void;
+  onFinish: (data: DataCollection, settings: AllSettingsType) => void;
 }): Promise<JsPsych> {
   // Parameters:
-  const blocksPerHalf: number = input.trialsPerHalf || 5;
+  const blocksPerHalf: number = input.duration.content || 5;
   const connectType: 'Serial Port' | 'USB' | null = 'Serial Port';
 
   // Pseudo state variable
@@ -290,14 +292,26 @@ export async function run({
     message_progress_bar: i18next.t('progressBar'),
     display_element: 'jspsych-content',
     on_finish: (): void => {
-      onFinish(jsPsych.data.get(), blocksPerHalf);
+      onFinish(jsPsych.data.get(), input);
       jsPsych.data.get().localSave('json', 'experiment-data.json');
     },
   });
 
-  // Randomize order of countables
+  // Set sequencing based on the sequencing config
   let expPartsCountables: ('people' | 'objects')[] = ['people', 'objects'];
-  expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
+  console.log(input.sequencing.content);
+  switch (input.sequencing.content) {
+    case 'people':
+      expPartsCountables = ['people', 'objects'];
+      break;
+    case 'objects':
+      expPartsCountables = ['objects', 'people'];
+      break;
+    case 'random':
+    default:
+      expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
+  }
+  console.log(expPartsCountables);
 
   // Initiate Timeline
   const timeline: Timeline = [];
@@ -311,13 +325,22 @@ export async function run({
 
   // 2. Add Device Connect pages
   if (connectType) {
-    timeline.push(deviceConnectPages(jsPsych, deviceInfo, connectType));
+    timeline.push(
+      deviceConnectPages(
+        jsPsych,
+        deviceInfo,
+        connectType,
+        input.configuration.forceDevice,
+      ),
+    );
   }
 
-  // Run numerosity task
+  // Add FullScreen Plugin
+  timeline.push(fullScreenPlugin(jsPsych));
+  if (!input.configuration.skipCalibration) {
+    timeline.push(resize(jsPsych));
+  }
   timeline.push(
-    fullScreenPlugin(jsPsych),
-    resize(jsPsych),
     groupInstructions(jsPsych, expPartsCountables[0]),
     tipScreen(),
     createButtonPage(

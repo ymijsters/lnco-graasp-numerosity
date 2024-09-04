@@ -1,23 +1,17 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useCallback, useEffect, useRef } from 'react';
 
 import { DataCollection, JsPsych } from 'jspsych';
 
+import { mutations } from '@/config/queryClient';
+
 import '../../styles/main.scss';
+import { AllSettingsType, useSettings } from '../context/SettingsContext';
 import { run } from './jspsych/experiment';
 
-type ExperimentProps = {
-  trialsPerHalf: number;
-  onCompleteExperiment: (
-    trialsPerHalf: number,
-    rawData: DataCollection,
-  ) => void;
-};
-
-export const Experiment: FC<ExperimentProps> = ({
-  trialsPerHalf,
-  onCompleteExperiment,
-}) => {
+export const Experiment: FC = () => {
   const jsPsychRef = useRef<null | Promise<JsPsych>>(null);
+  const { configuration, sequencing, duration } = useSettings();
+  const { mutate: postAppData } = mutations.usePostAppData();
 
   const assetPath = {
     images: [
@@ -115,17 +109,20 @@ export const Experiment: FC<ExperimentProps> = ({
     misc: ['assets/instruction-media - Shortcut.lnk'],
   };
 
-  const onFinish = (data: DataCollection, blocksPerHalf: number): void => {
-    onCompleteExperiment(blocksPerHalf, data);
-  };
-
+  const onFinish = useCallback(
+    (rawData: DataCollection, settings: AllSettingsType): void => {
+      postAppData({
+        data: { settings, rawData },
+        type: 'a-type',
+      });
+    },
+    [postAppData],
+  );
   useEffect(() => {
     if (!jsPsychRef.current) {
-      // eslint-disable-next-line no-console
-      console.log(`In Experiment Component ${trialsPerHalf}`);
       jsPsychRef.current = run({
         assetPaths: assetPath,
-        input: { trialsPerHalf },
+        input: { configuration, sequencing, duration },
         environment: '',
         title: 'Numerosity Experiment on Graasp',
         version: '0.1',

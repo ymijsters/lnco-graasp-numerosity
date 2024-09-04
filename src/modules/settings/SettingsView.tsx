@@ -112,7 +112,7 @@ const SettingsView: FC = () => {
         <Typography variant="h6">{t('SETTINGS.SEQUENCING')}</Typography>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
+          defaultValue="random"
           name="radio-buttons-group"
           row
           value={sequencing.content}
