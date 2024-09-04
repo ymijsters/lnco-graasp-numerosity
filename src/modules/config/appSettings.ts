@@ -1,5 +1,5 @@
 export type SequencingSettings = {
-  content: 'random' | 'object' | 'person';
+  content: 'random' | 'objects' | 'people';
 };
 
 export type DurationSettings = {

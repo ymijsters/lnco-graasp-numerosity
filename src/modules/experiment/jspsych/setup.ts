@@ -9,11 +9,7 @@ import { type ConnectType, type DeviceType, type Timeline } from './experiment';
 // eslint-disable-next-line prettier/prettier
 import { quitBtnAction } from './quit';
 // eslint-disable-next-line prettier/prettier
-import {
-  connectToSerial,
-  connectToUSB,
-  sendTrigger,
-} from './utils';
+import { connectToSerial, connectToUSB, sendTrigger } from './utils';
 
 /**
  * @function generatePreloadStrings
@@ -55,6 +51,7 @@ export const deviceConnectPages = (
   jsPsych: JsPsych,
   deviceInfo: DeviceType,
   connectType: ConnectType,
+  forceDevice: boolean,
 ): Timeline => {
   const serialConnect: boolean = connectType === 'Serial Port';
   const connectFunction:
@@ -69,7 +66,10 @@ export const deviceConnectPages = (
         stimulus: `${i18next.t('connectInstructions', {
           connection: connectType,
         })}<br>`,
-        choices: [i18next.t('connectDeviceBtn'), i18next.t('skipConnect')],
+        choices: [
+          i18next.t('connectDeviceBtn'),
+          ...(!forceDevice ? [i18next.t('skipConnect')] : []),
+        ],
         on_load: (): void => {
           // Add event listener to the connect button
           document
