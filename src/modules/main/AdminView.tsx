@@ -1,4 +1,5 @@
-import { type FC } from 'react';
+import { type FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
@@ -6,38 +7,44 @@ import { Box, Tab } from '@mui/material';
 import AnswersView from '../answers/AnswersView';
 import SettingsView from '../settings/SettingsView';
 
-const AdminView: FC = () => (
-  <Box>
-    <TabContext value={activeTab}>
-      <TabList
-        textColor="secondary"
-        indicatorColor="secondary"
-        onChange={(_, newTab: Tabs) => setActiveTab(newTab)}
-        centered
-      >
-        <Tab
-          data-cy={TAB_TABLE_VIEW_CY}
-          value={Tabs.TABLE_VIEW}
-          label={t('ANSWERS.TITLE')}
-          icon={<TableViewIcon />}
-          iconPosition="start"
-        />
-        <Tab
-          data-cy={TAB_SETTINGS_VIEW_CY}
-          value={Tabs.SETTINGS_VIEW}
-          label={t('SETTINGS.TITLE')}
-          icon={<SettingsApplicationsIcon />}
-          iconPosition="start"
-        />
-      </TabList>
-      <TabPanel value={Tabs.TABLE_VIEW} data-cy={TABLE_VIEW_PANE_CY}>
-        <AnswersView />
-      </TabPanel>
-      <TabPanel value={Tabs.SETTINGS_VIEW} data-cy={SETTINGS_VIEW_PANE_CY}>
-        <SettingsView />
-      </TabPanel>
-    </TabContext>
-  </Box>
-);
+enum Tabs {
+  TABLE_VIEW = 'TABLE_VIEW',
+  SETTINGS_VIEW = 'SETTINGS_VIEW',
+}
+
+const AdminView: FC = () => {
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState(Tabs.TABLE_VIEW);
+
+  return (
+    <Box>
+      <TabContext value={activeTab}>
+        <TabList
+          textColor="secondary"
+          indicatorColor="secondary"
+          onChange={(_, newTab: Tabs) => setActiveTab(newTab)}
+          centered
+        >
+          <Tab
+            value={Tabs.TABLE_VIEW}
+            label={t('ANSWERS.TITLE')}
+            iconPosition="start"
+          />
+          <Tab
+            value={Tabs.SETTINGS_VIEW}
+            label={t('SETTINGS.TITLE')}
+            iconPosition="start"
+          />
+        </TabList>
+        <TabPanel value={Tabs.TABLE_VIEW}>
+          <AnswersView />
+        </TabPanel>
+        <TabPanel value={Tabs.SETTINGS_VIEW}>
+          <SettingsView />
+        </TabPanel>
+      </TabContext>
+    </Box>
+  );
+};
 
 export default AdminView;
