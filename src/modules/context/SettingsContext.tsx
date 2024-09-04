@@ -2,18 +2,36 @@ import { FC, ReactElement, createContext, useContext } from 'react';
 
 import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
+import {
+  ConfigurationSettings,
+  DurationSettings,
+  SequencingSettings,
+} from '../config/appSettings';
 
 // mapping between Setting names and their data type
 // eslint-disable-next-line @typescript-eslint/ban-types
-type AllSettingsType = {};
+type AllSettingsType = {
+  configuration: ConfigurationSettings;
+  duration: DurationSettings;
+  sequencing: SequencingSettings;
+};
 
 // default values for the data property of settings by name
-const defaultSettingsValues: AllSettingsType = {};
+const defaultSettingsValues: AllSettingsType = {
+  configuration: {
+    skipCalibration: false,
+    forceDevice: false,
+  },
+  duration: {
+    content: 4,
+  },
+  sequencing: {
+    content: 'random',
+  },
+};
 
 // list of the settings names
-const ALL_SETTING_NAMES = [
-  // name of your settings
-] as const;
+const ALL_SETTING_NAMES = ['configuration', 'duration', 'sequencing'] as const;
 
 // automatically generated types
 type AllSettingsNameType = (typeof ALL_SETTING_NAMES)[number];
@@ -75,14 +93,17 @@ export const SettingsProvider: FC<Prop> = ({ children }) => {
     if (isSuccess) {
       const allSettings: AllSettingsType = ALL_SETTING_NAMES.reduce(
         <T extends AllSettingsNameType>(acc: AllSettingsType, key: T) => {
-          // todo: types are not inferred correctly here
-          // @ts-ignore
           const setting = appSettingsList.find((s) => s.name === key);
-          const settingData = setting?.data;
-          acc[key] = settingData as AllSettingsType[T];
+          if (setting) {
+            const settingData =
+              setting?.data as unknown as AllSettingsType[typeof key];
+            acc[key] = settingData;
+          } else {
+            acc[key] = defaultSettingsValues[key];
+          }
           return acc;
         },
-        {},
+        defaultSettingsValues,
       );
       return {
         ...allSettings,

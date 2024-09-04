@@ -61,5 +61,14 @@
   "quitSurveyBtnClose": "Close",
   "quitSurveyBtnEnd": "Abort the experiment",
   "abortedMessage": "Experiment aborted!<br><br>You aborted the experience prematurely.",
-  "endMessage": "Thank you!<br><br>You have completed the experiment!"
+  "endMessage": "Thank you!<br><br>You have completed the experiment!",
+  "SETTINGS.TITLE": "Settings",
+  "ANSWERS.TITLE": "Answers",
+  "SETTINGS.BLOCKS.TITLE": "Number of blocks per condition",
+  "SETTINGS.BLOCKS.DESCRIPTION": "This experiment works in blocks of 4 trials, this settings sets the number of blocks tested per experiment condition.",
+  "SETTINGS.BLOCKS.EXAMPLE": "Example: Blocks per condition = 2 means 2 x 4 people trials and 2 x 4 object trials.",
+  "SETTINGS.EXPERIMENT.CONFIG": "Experiment Configuration",
+  "SETTINGS.SKIP.SCREEN.CALIBRATION":"Skip the screen calibration steps",
+  "SETTINGS.FORCE.DEVICE": "Force the usage of an external device with the experiment",
+  "SETTINGS.SEQUENCING": "Set the experimental condition that should be shown first"
 }

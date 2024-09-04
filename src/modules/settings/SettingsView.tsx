@@ -1,59 +1,142 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Box, Button, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Switch,
+  TextField,
+  Typography,
+} from '@mui/material';
 import Stack from '@mui/material/Stack';
 
-import { hooks, mutations } from '@/config/queryClient';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { isEqual } from 'lodash';
+
+import {
+  ConfigurationSettings,
+  DurationSettings,
+  SequencingSettings,
+} from '../config/appSettings';
+import { useSettings } from '../context/SettingsContext';
 
 const SettingsView: FC = () => {
-  const { data: appSettings } = hooks.useAppSettings();
-  const { mutate: postAppSetting } = mutations.usePostAppSetting();
-  const { mutate: patchAppSetting } = mutations.usePatchAppSetting();
+  const { t } = useTranslation();
+  const {
+    configuration: configurationSavedState,
+    sequencing: sequencingSavedState,
+    duration: durationSavedState,
+    saveSettings,
+  } = useSettings();
 
-  const trialsPerHalfStart =
-    Number(
-      appSettings?.find((data) => {
-        if ('trials' in data.data) {
-          return data.data.trials;
-        }
-        return false;
-      })?.data.trials,
-    ) || 1;
-
-  const [trialsPerHalfSetting, updateTrialSetting] = useState<
-    number | undefined
-  >(trialsPerHalfStart);
+  const [configuration, setConfiguration] = useState<ConfigurationSettings>(
+    configurationSavedState,
+  );
+  const [sequencing, setSequencing] =
+    useState<SequencingSettings>(sequencingSavedState);
+  const [duration, setDuration] =
+    useState<DurationSettings>(durationSavedState);
 
   const saveAllSettings = (): void => {
-    if (appSettings) {
-      const previousSetting = appSettings.find((s) => s.name === 'trials');
-      if (!previousSetting) {
-        console.log(appSettings); // eslint-disable-line no-console
-        postAppSetting({
-          data: { trials: trialsPerHalfSetting },
-          name: 'trialsPerHalf',
-        });
-      } else if (previousSetting.data.trials !== trialsPerHalfSetting) {
-        patchAppSetting({
-          id: previousSetting.id,
-          data: { trials: trialsPerHalfSetting },
-        });
-      }
-    }
+    saveSettings('configuration', configuration);
+    saveSettings('sequencing', sequencing);
+    saveSettings('duration', duration);
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log({ configuration, sequencing, duration });
+    setDuration(durationSavedState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [durationSavedState]);
+
+  const disableSave = useMemo(() => {
+    if (
+      isEqual(configurationSavedState, configuration) &&
+      isEqual(sequencingSavedState, sequencing) &&
+      isEqual(durationSavedState, duration)
+    ) {
+      return true;
+    }
+    return false;
+  }, [
+    configuration,
+    configurationSavedState,
+    sequencing,
+    sequencingSavedState,
+    duration,
+    durationSavedState,
+  ]);
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h3">Settings</Typography>
+      <Typography variant="h4">{t('SETTINGS.TITLE')}</Typography>
       <Stack spacing={1}>
-        <Typography variant="h4">Trials per Half</Typography>
-        <TextField
-          value={trialsPerHalfSetting}
-          onChange={(e) => updateTrialSetting(Number(e.target.value))}
+        <Typography variant="h6">{t('SETTINGS.EXPERIMENT.CONFIG')}</Typography>
+        <FormControlLabel
+          control={<Switch />}
+          label={t('SETTINGS.SKIP.SCREEN.CALIBRATION')}
+          onChange={(e, checked) => {
+            setConfiguration({ ...configuration, skipCalibration: checked });
+          }}
+          checked={configuration.skipCalibration}
+        />
+        <FormControlLabel
+          control={<Switch />}
+          label={t('SETTINGS.FORCE.DEVICE')}
+          onChange={(e, checked) => {
+            setConfiguration({ ...configuration, forceDevice: checked });
+          }}
+          checked={configuration.forceDevice}
         />
       </Stack>
+      <Stack spacing={1}>
+        <Typography variant="h6">{t('SETTINGS.BLOCKS.TITLE')}</Typography>
+        <Stack spacing={0}>
+          <Typography variant="body1">
+            {t('SETTINGS.BLOCKS.DESCRIPTION')}
+          </Typography>
+          <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            {t('SETTINGS.BLOCKS.EXAMPLE')}
+          </Typography>
+        </Stack>
+        <TextField
+          value={duration.content}
+          onChange={(e) => setDuration({ content: Number(e.target.value) })}
+        />
+      </Stack>
+      <Stack spacing={1}>
+        <Typography variant="h6">{t('SETTINGS.SEQUENCING')}</Typography>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="female"
+          name="radio-buttons-group"
+          row
+          value={sequencing.content}
+          onChange={(e) =>
+            setSequencing({
+              content: e.target.value as SequencingSettings['content'],
+            })
+          }
+        >
+          <FormControlLabel value="random" control={<Radio />} label="Random" />
+          <FormControlLabel
+            value="objects"
+            control={<Radio />}
+            label="Objects"
+          />
+          <FormControlLabel value="people" control={<Radio />} label="People" />
+        </RadioGroup>
+      </Stack>
       <Box>
-        <Button variant="contained" onClick={saveAllSettings}>
+        <Button
+          variant="contained"
+          onClick={saveAllSettings}
+          disabled={disableSave}
+        >
           Save
         </Button>
       </Box>
