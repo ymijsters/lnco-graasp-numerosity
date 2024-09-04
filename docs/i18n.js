@@ -1,18 +1,17 @@
 import i18next from 'i18next';
 import { initLang } from './languages.js';
 // Import your translation files
-import ca from '../../locales/ca/ca.json';
-import de from '../../locales/de/de.json';
-import en from '../../locales/en/en.json';
-import es from '../../locales/es/es.json';
-import fr from '../../locales/fr/fr.json';
-const fallback_lang = 'en';
-const lang = initLang(['en', 'fr', 'es', 'ca', 'de'], fallback_lang);
-
+import ca from '../../../locales/ca/ca.json';
+import de from '../../../locales/de/de.json';
+import en from '../../../locales/en/en.json';
+import es from '../../../locales/es/es.json';
+import fr from '../../../locales/fr/fr.json';
+const fallbackLanguage = 'en';
+const lang = initLang(['en', 'fr', 'es', 'ca', 'de'], fallbackLanguage);
 // Initialize i18next
 i18next.init({
     lng: lang, // default language
-    fallbackLng: fallback_lang,
+    fallbackLng: fallbackLanguage,
     resources: {
         en: { translation: en },
         fr: { translation: fr },
@@ -27,5 +26,4 @@ i18next.init({
     if (err)
         console.error('i18next initialization error:', err);
 });
-
 export default i18next;

@@ -50,8 +50,8 @@ export async function connectToUSB(): Promise<null> {
 
 // Helper function to send data to the USB device
 export async function sendTriggerToUSB(
-  device: null,
-  trigger: string,
+  _device: null,
+  _trigger: string,
 ): Promise<void> {
   /* try {
     if (device) {

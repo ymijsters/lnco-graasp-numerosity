@@ -15,11 +15,11 @@ import { initJsPsych } from 'jspsych';
 import FullscreenPlugin from '@jspsych/plugin-fullscreen';
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import PreloadPlugin from '@jspsych/plugin-preload';
-import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
-
-// Import styles
-import '../../styles/main.scss';
-import { groupInstructions, tipScreen } from './instructions';
+import jsPsychSurveyHtmlForm from '@jspsych/pl../jspsych/instructionsml-form';
+../jspsych/quit
+// Import styles../jspsych/quit
+import '../../styles/main.scss';../jspsych/setup
+import { groupInstructions, tipScreen } from './instructions';../jspsych/utils
 import { quitBtnAction, showEndScreen } from './quit';
 import { generatePreloadStrings, resize } from './setup';
 import { connectToUSB, createButtonPage, sendTriggerToUSB } from './utils';

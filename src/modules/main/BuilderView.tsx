@@ -24,7 +24,7 @@ const BuilderView = (): JSX.Element => {
   }
 
   return (
-    <div data-cy={BUILDER_VIEW_CY} style={{ height: '800px' }}>
+    <div data-cy={BUILDER_VIEW_CY}>
       <Stack direction="column" spacing={2}>
         {mainView}
       </Stack>

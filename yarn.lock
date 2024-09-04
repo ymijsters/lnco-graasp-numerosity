@@ -2831,6 +2831,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jspsych/plugin-resize@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@jspsych/plugin-resize@npm:2.0.0"
+  peerDependencies:
+    jspsych: ">=7.0.0"
+  checksum: 10/d4f38cde41fd28b9779bed858a2082b34e3479acac727588f9f05bca4943c6a98cd9178592a0d381b65f2b2130b1216d83d2f8bb22766c1ab6345314b9f1d015
+  languageName: node
+  linkType: hard
+
 "@jspsych/plugin-survey-html-form@npm:^2.0.0":
   version: 2.0.0
   resolution: "@jspsych/plugin-survey-html-form@npm:2.0.0"
@@ -4217,6 +4226,20 @@ __metadata:
   version: 9.0.8
   resolution: "@types/uuid@npm:9.0.8"
   checksum: 10/b8c60b7ba8250356b5088302583d1704a4e1a13558d143c549c408bf8920535602ffc12394ede77f8a8083511b023704bc66d1345792714002bfa261b17c5275
+  languageName: node
+  linkType: hard
+
+"@types/w3c-web-serial@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "@types/w3c-web-serial@npm:1.0.6"
+  checksum: 10/1656ec1f658b80230cdb4d93cc44517f5d74a63b4c381029703034e0142be43a4333f65fbd16d44abdfb1406f372e36b95bc8ddc8af4d244928544b898f93ea8
+  languageName: node
+  linkType: hard
+
+"@types/w3c-web-usb@npm:^1.0.10":
+  version: 1.0.10
+  resolution: "@types/w3c-web-usb@npm:1.0.10"
+  checksum: 10/6ac6786a0788f0846a48b103ab06ca5fde5eb95674217b522420a2f6157bee3e181a961c1b7011940f497c55f4f5cc46129657d881fdd8112b48764089679ad6
   languageName: node
   linkType: hard
 
@@ -8124,6 +8147,7 @@ __metadata:
     "@jspsych/plugin-html-keyboard-response": "npm:^2.0.0"
     "@jspsych/plugin-instructions": "npm:^2.0.0"
     "@jspsych/plugin-preload": "npm:^2.0.0"
+    "@jspsych/plugin-resize": "npm:^2.0.0"
     "@jspsych/plugin-survey-html-form": "npm:^2.0.0"
     "@jspsych/plugin-survey-multi-choice": "npm:^2.0.0"
     "@mui/icons-material": "npm:5.15.21"
@@ -8138,6 +8162,8 @@ __metadata:
     "@types/react": "npm:18.3.3"
     "@types/react-dom": "npm:18.3.0"
     "@types/uuid": "npm:9.0.8"
+    "@types/w3c-web-serial": "npm:^1.0.6"
+    "@types/w3c-web-usb": "npm:^1.0.10"
     "@typescript-eslint/eslint-plugin": "npm:7.18.0"
     "@typescript-eslint/parser": "npm:7.18.0"
     "@unly/universal-language-detector": "npm:^2.0.3"

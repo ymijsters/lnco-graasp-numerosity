@@ -1,9 +1,9 @@
-/* eslint-disable */
 import { FC, useEffect, useRef } from 'react';
 
 import { DataCollection, JsPsych } from 'jspsych';
 
-import { run } from '../experiment/experiment';
+import '../../styles/main.scss';
+import { run } from './jspsych/experiment';
 
 type ExperimentProps = {
   trialsPerHalf: number;
@@ -121,6 +121,7 @@ export const Experiment: FC<ExperimentProps> = ({
 
   useEffect(() => {
     if (!jsPsychRef.current) {
+      // eslint-disable-next-line no-console
       console.log(`In Experiment Component ${trialsPerHalf}`);
       jsPsychRef.current = run({
         assetPaths: assetPath,
@@ -131,13 +132,12 @@ export const Experiment: FC<ExperimentProps> = ({
         onFinish,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div>
-      <div className="jspsych-content-wrapper">
-        <div id="jspsych-content" className="jspsych-content" />
-      </div>
+    <div className="jspsych-content-wrapper">
+      <div id="jspsych-content" className="jspsych-content" />
     </div>
   );
 };

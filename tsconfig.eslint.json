@@ -3,9 +3,13 @@
   "include": [
     "vite.config.ts",
     "cypress.config.ts",
+    "src/**/**/**/*.ts",
+    "src/modules/experiment/jspsych/experiment.ts",
+    "src/**/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.ts",
     "test/**/*.ts",
-    "cypress/**/*.ts"
+    "cypress/**/*.ts",
+    "node_modules/@types"
   ]
 }

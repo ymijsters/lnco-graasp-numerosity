@@ -24,7 +24,7 @@ import Loader from '@/modules/common/Loader';
 import { useObjectState } from '@/utils/hooks';
 
 import ErrorBoundary from './ErrorBoundary';
-import i18Next from './experiment/i18n';
+import i18Next from './experiment/jspsych/i18n';
 import App from './main/App';
 
 // declare the module to enable theme modification
@@ -76,7 +76,7 @@ const Root: FC = () => {
   const [mockContext, setMockContext] = useObjectState(defaultMockContext);
 
   return (
-    <RootDiv style={{ height: '800px' }}>
+    <RootDiv>
       {/* Used to define the order of injected properties between JSS and emotion */}
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>

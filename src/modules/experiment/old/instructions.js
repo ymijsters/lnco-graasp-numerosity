@@ -4,8 +4,8 @@ import jsPsychSurveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 import i18next from 'i18next';
 //import { DataCollection } from 'jspsych/src/modules/data/DataCollection';
 // Import styles and language functions
-import * as langf from './languages.js';
-import { activateMQCunderline } from './utils.js';
+import * as langf from '../jspsych/languages.js';
+import { activateMQCunderline } from '../jspsych/utils.js';
 /**
  * @function generateInputExample
  * @description Generates an HTML string for an example input screen used in the instructions.

@@ -31,7 +31,7 @@ const PlayerView = (): JSX.Element => {
   );
 
   return (
-    <div data-cy={PLAYER_VIEW_CY} style={{ height: '800px' }}>
+    <div data-cy={PLAYER_VIEW_CY}>
       <Experiment
         trialsPerHalf={trialsPerHalfSetting}
         onCompleteExperiment={onCompleteExperiment}

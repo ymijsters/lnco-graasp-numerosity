@@ -15,8 +15,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "typeRoots": ["node_modules", "node_modules/@types", "./src/@types"],
-    "types": ["vite/client", "cypress"],
+    "typeRoots": ["./node_modules", "./node_modules/@types", "./src/@types"],
+    "types": ["vite/client", "cypress", "w3c-web-serial", "w3c-web-usb"],
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]
