@@ -299,6 +299,7 @@ export async function run({
 
   // Set sequencing based on the sequencing config
   let expPartsCountables: ('people' | 'objects')[] = ['people', 'objects'];
+  // eslint-disable-next-line no-console
   console.log(input.sequencing.content);
   switch (input.sequencing.content) {
     case 'people':
@@ -311,6 +312,7 @@ export async function run({
     default:
       expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
   }
+  // eslint-disable-next-line no-console
   console.log(expPartsCountables);
 
   // Initiate Timeline
