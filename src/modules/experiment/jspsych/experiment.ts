@@ -299,7 +299,6 @@ export async function run({
 
   // Set sequencing based on the sequencing config
   let expPartsCountables: ('people' | 'objects')[] = ['people', 'objects'];
-  console.log(input.sequencing.content);
   switch (input.sequencing.content) {
     case 'people':
       expPartsCountables = ['people', 'objects'];
@@ -311,7 +310,6 @@ export async function run({
     default:
       expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
   }
-  console.log(expPartsCountables);
 
   // Initiate Timeline
   const timeline: Timeline = [];
