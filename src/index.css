@@ -6,6 +6,13 @@
     'Liberation Mono', monospace;
 }
 
+@media all and (display-mode: fullscreen) {
+  html,
+  body {
+    height: 100vh;
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
