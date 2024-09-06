@@ -1,6 +1,7 @@
 import FullscreenPlugin from '@jspsych/plugin-fullscreen';
 import HtmlButtonResponsePlugin from '@jspsych/plugin-html-button-response';
 import JsResize from '@jspsych/plugin-resize';
+import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 import i18next from 'i18next';
 import { DataCollection, JsPsych } from 'jspsych';
 
@@ -32,7 +33,7 @@ export function generatePreloadStrings(): string[] {
 }
 
 /**
- * @function DeviceConnectPages
+ * @function deviceConnectPages
  * @description Creates a timeline to guide the user through the process of connecting a USB or Serial device, with options for handling connection errors and retries. The timeline consists of a page that provides instructions for connecting the device and allows the user to attempt the connection, retry if it fails, or skip the connection process entirely.
  *
  * The function handles:
@@ -201,82 +202,93 @@ export const resize: (jsPsych: JsPsych) => Timeline = (
 ): Timeline => ({
   timeline: [
     {
-      type: JsResize,
-      item_width: 8.56,
-      item_height: 5.398,
-      prompt: `<p>${i18next.t('calibration')}</p>`,
-      starting_size: 383,
+      type: jsPsychSurveyHtmlForm,
+      preamble: ` <div class="resize-page"> 
+                        <h3>${i18next.t('barResizeTitle')}</h3>
+                        <p style="text-align: center;">${i18next.t('barResizeInstructions')}</p>
+                        <br>
+                        <div id="resize-bar"></div>
+                        <br>
+                      </div>`,
+      html: `
+                <div>
+                  <labelfor="cm-bar-input">${i18next.t('barResizeInputLabel')}</label>
+                  <input name="input" id="cm-bar-input" type="number" min="0.001" step="0.001" placeholder="cm" required style="font-size: larger; margin-left: 5%; width: 30%;">
+                </div>
+                <br>
+              </div>
+`,
+      autofocus: 'cm-bar-input',
       button_label: i18next.t('resizeBtn'),
-      pixels_per_unit: 37.795275591,
+      on_load: (): void => {
+        const skipBar: HTMLElement = document.createElement('div');
+        skipBar.id = 'skip-bar-items';
+        skipBar.innerHTML = `  <div class="warning-box">
+                                    <h1 class="warning">!</h1><p>${i18next.t('noRuler')}</p>
+                                  </div>
+                                  <button class="jspsych-btn" type="button" id="skip-bar-resize-btn">${i18next.t('noRulerBtn')}</button>`;
+        document.getElementById('jspsych-content')!.appendChild(skipBar);
+        document
+          .getElementById('skip-bar-resize-btn')!
+          .addEventListener('click', (): void => {
+            jsPsych.finishTrial({ scale_factor: 'skip-bar-resize' });
+          });
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      on_finish: (data: any): void => {
+        const barResizeSkip = document.getElementById('skip-bar-items');
+        // Remove the element from its parent node
+        barResizeSkip?.parentNode?.removeChild(barResizeSkip);
+
+        // Add a custom field 'scale_factor' to the data object based on the response
+        if (!data.scale_factor) {
+          setSizes(10 / Number(data.response.input));
+        }
+      },
+    },
+    {
+      timeline: [
+        {
+          type: JsResize,
+          item_width: 8.56,
+          item_height: 5.398,
+          prompt: `<p>${i18next.t('calibration')}</p>`,
+          starting_size: 383,
+          button_label: i18next.t('resizeBtn'),
+          pixels_per_unit: 37.795275591,
+          on_load: (): void => {
+            const autoResizeButton: HTMLElement =
+              document.createElement('button');
+            autoResizeButton.id = 'skip-resize';
+            autoResizeButton.className = 'jspsych-btn';
+            autoResizeButton.style.margin = '2% auto';
+            autoResizeButton.innerHTML = i18next.t('autoResizeBtn');
+            autoResizeButton.addEventListener('click', (): void => {
+              jsPsych.finishTrial({ scale_factor: autoResize() });
+            });
+            document
+              .getElementById('jspsych-content')!
+              .appendChild(autoResizeButton);
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          on_finish: (data: any) => {
+            const resizeSkip = document.getElementById('skip-resize');
+            // Remove the element from its parent node
+            resizeSkip?.parentNode?.removeChild(resizeSkip);
+
+            setSizes(data.scale_factor);
+            document
+              .getElementById('jspsych-content')!
+              .removeAttribute('style');
+            document
+              .getElementById('jspsych-content')!
+              .removeAttribute('style');
+          },
+        },
+      ],
+      conditional_function: (): boolean =>
+        jsPsych.data.get().last(1).values()[0].scale_factor ===
+        'skip-bar-resize',
     },
   ],
-  on_load(): void {
-    // Create a custom overlay for bar resize instructions
-    const barResizePage: HTMLElement = document.createElement('div');
-
-    barResizePage.id = 'bar-resize-page';
-    barResizePage.style.top = `${document.getElementById('jspsych-progressbar-container')!.offsetHeight + 1}px`;
-    barResizePage.classList.add('custom-overlay');
-    barResizePage.innerHTML = `
-      <div class="resize-page"> 
-        <h3>${i18next.t('barResizeTitle')}</h3>
-        <p style="text-align: center;">${i18next.t('barResizeInstructions')}</p>
-        <br>
-        <div id="resize-bar"></div>
-        <br>
-        <form id="bar-resize-form" style="text-align: center;">
-          <div>  
-            <label for="cm-bar-input">${i18next.t('barResizeInputLabel')}</label>
-            <input id="cm-bar-input" type="number" min="0.001" step="0.001" placeholder="cm" required style="font-size: larger; margin-left: 5%; width: 30%;">
-          </div>
-          <br>
-          <input type="submit" class="jspsych-btn" value="${i18next.t('resizeBtn')}">
-        </form>
-        <div class="warning-box">
-          <h1 class="warning">!</h1><p>${i18next.t('noRuler')}</p>
-        </div>
-        <button class="jspsych-btn" type="button" onclick="document.body.removeChild(document.getElementById('bar-resize-page'))">${i18next.t('noRulerBtn')}</button>
-      </div>`;
-    document.body.appendChild(barResizePage);
-
-    // Handle form submission and calculate scale factor
-    document
-      .getElementById('bar-resize-form')!
-      .addEventListener('submit', (event: SubmitEvent): void => {
-        event.preventDefault();
-        jsPsych.finishTrial({
-          scaleFactor:
-            10 /
-            Number(
-              (document.getElementById('cm-bar-input') as HTMLInputElement)
-                .value,
-            ),
-        });
-
-        document.body.removeChild(
-          document.getElementById('bar-resize-page') as Node,
-        );
-      });
-
-    document.getElementById('cm-bar-input')!.focus();
-
-    // Add button to return to bar resize page if needed
-    const resizeSwitchButton: HTMLElement = document.createElement('div');
-    resizeSwitchButton.id = 'skip-resize';
-    resizeSwitchButton.innerHTML = `<br><button class="jspsych-btn">${i18next.t('autoResizeBtn')}</button>`;
-    resizeSwitchButton.addEventListener('click', (): void => {
-      jsPsych.finishTrial({ scaleFactor: autoResize() });
-    });
-    document.getElementById('jspsych-content')!.appendChild(resizeSwitchButton);
-  },
-  on_finish: () => {
-    const resizeSkip = document.getElementById('skip-resize');
-    if (resizeSkip) {
-      // Remove the element from its parent node
-      resizeSkip.parentNode?.removeChild(resizeSkip);
-    }
-    // Apply scaling factor to images and other elements
-    setSizes(jsPsych.data.get().last(1).values()[0].scaleFactor);
-    document.getElementById('jspsych-content')!.removeAttribute('style');
-  },
 });
