@@ -12,14 +12,17 @@ h1 {
   font-size: 50px;
 }
 
+.jspsych-content-wrapper {
+  height: 100%;
+}
+
 .jspsych-display-element {
   display: flex;
   margin: auto;
   flex: 1 1 100%;
   background-color: rgb(250, 250, 255);
   color: rgb(49, 49, 49);
-  height:100vh;
-  width:100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -55,7 +58,7 @@ h1 {
   padding: 8px 0px;
   width: 100%;
   line-height: 1em;
-  position:relative;
+  position: relative;
 }
 
 #jspsych-progressbar-container span {
@@ -82,10 +85,10 @@ h1 {
   font-size: 38px;
 }
 
-.jspsych-btn-group-grid{
+.jspsych-btn-group-grid {
   margin: 10px;
 }
-.jspsych-btn-group-grid .jspsych-btn{
+.jspsych-btn-group-grid .jspsych-btn {
   margin: 0 20px;
 }
 
@@ -107,8 +110,11 @@ h1 {
   border: 1px solid transparent;
   border-radius: 4px;
   background-color: rgb(80, 80, 210);
-  color: rgb(255, 255, 255); 
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12)  0px 1px 5px 0px;
+  color: rgb(255, 255, 255);
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
   margin: 0 auto;
 }
 
@@ -127,8 +133,8 @@ h1 {
   right: 1%;
   position: absolute;
   top: 50%;
-  color: rgb(80, 80, 210); 
-  position: absolute; 
+  color: rgb(80, 80, 210);
+  position: absolute;
   background-color: #fff;
   transform: translateY(-50%);
   display: inline-block;
@@ -145,15 +151,18 @@ h1 {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12)  0px 1px 5px 0px;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
 }
 
-.quit-survey-content{
-  width:60%;
+.quit-survey-content {
+  width: 60%;
   margin: 0 auto;
 }
 
-#quit-form{
+#quit-form {
   text-align: left;
 }
 
@@ -174,7 +183,7 @@ button:hover {
   color: rgb(49, 49, 49);
 }
 
-.resize-page{
+.resize-page {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -194,21 +203,21 @@ button:hover {
   margin: 0 5% 0 10%;
 }
 
-.warning-box{
-  width:80%;
+.warning-box {
+  width: 80%;
   margin: 0 auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
-.warning-box p{
+.warning-box p {
   vertical-align: middle;
   margin: auto;
   margin-left: 20px;
 }
 
-.custom-overlay .resize-page{
+.custom-overlay .resize-page {
   width: 75%;
 }
 
@@ -217,7 +226,7 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  width:100%;
+  width: 100%;
 }
 
 .inst-graphic {
@@ -225,8 +234,8 @@ button:hover {
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 100%; 
-  height: 30vh; 
+  width: 100%;
+  height: 30vh;
 }
 
 .inst-monitor {
@@ -252,67 +261,65 @@ button:hover {
   width: 80%;
 }
 
-.input-example{
+.input-example {
   background-color: rgb(250, 250, 255);
   color: rgb(49, 49, 49);
   font-size: 0.7rem;
   line-height: 0.9rem;
-  height:42%;
-  display:flex;
+  height: 42%;
+  display: flex;
 }
 
-.input-content{
+.input-content {
   margin: auto;
 }
 
-.input-content p{
+.input-content p {
   margin: 0 0 10px 0;
 }
 
 /* Instruction page 4 - 3 monitors in a row */
-.group-monitors{
+.group-monitors {
   position: relative;
-  width:100%;
+  width: 100%;
 }
 
-.group-monitors .inst-monitor{
-  width:75%;
+.group-monitors .inst-monitor {
+  width: 75%;
 }
 
-.group-monitors .inst-screen{
-  width:72%;
-  left:14%;
+.group-monitors .inst-screen {
+  width: 72%;
+  left: 14%;
   transform: translateY(-130%);
 }
 
-.group-monitors .input-example{
-  width:70%;
-  left:15%;
-  height:65%;
+.group-monitors .input-example {
+  width: 70%;
+  left: 15%;
+  height: 65%;
   transform: translateY(-140%);
 }
 
-.input-example input{
+.input-example input {
   width: 50%;
 }
 
-.input-example .jspsych-btn{
+.input-example .jspsych-btn {
   font-size: 0.5rem;
 }
 
 /* Instruction page 5 - Video*/
-.inst-graphic video{
-  width:75%;
+.inst-graphic video {
+  width: 75%;
   margin: 0 auto;
 }
 
 /* Instruction page 6 - Test*/
-.jspsych-survey-multi-choice-question{
+.jspsych-survey-multi-choice-question {
   width: 60%;
   margin: 0 auto;
 }
-
-
 
 .underlined {
   text-decoration: underline;
@@ -323,6 +330,6 @@ button:hover {
   margin: 5%;
 }
 
-.jspsych-instructions-nav{
+.jspsych-instructions-nav {
   margin: 20px 0;
 }

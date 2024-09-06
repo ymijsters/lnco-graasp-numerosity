@@ -118,6 +118,7 @@ export const Experiment: FC = () => {
     },
     [postAppData],
   );
+
   useEffect(() => {
     if (!jsPsychRef.current) {
       jsPsychRef.current = run({
