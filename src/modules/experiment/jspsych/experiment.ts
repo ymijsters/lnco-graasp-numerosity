@@ -127,7 +127,8 @@ const partofexp: (
     // Crosshair shown before each image for 500ms.
     {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: '<p style="font-size: 3cm;">+</p>',
+      stimulus:
+        '<div class="task-img"><p style="font-size: 3cm; margin: auto;">+</p></div>',
       choices: 'NO_KEYS',
       trial_duration: 500,
       on_start: (): void => {

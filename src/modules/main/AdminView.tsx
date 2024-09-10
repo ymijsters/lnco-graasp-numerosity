@@ -25,11 +25,7 @@ const AdminView: FC = () => {
           onChange={(_, newTab: Tabs) => setActiveTab(newTab)}
           centered
         >
-          <Tab
-            value={Tabs.TABLE_VIEW}
-            label={t('ANSWERS.TITLE')}
-            iconPosition="start"
-          />
+          <Tab value={Tabs.TABLE_VIEW} label="Results" iconPosition="start" />
           <Tab
             value={Tabs.SETTINGS_VIEW}
             label={t('SETTINGS.TITLE')}

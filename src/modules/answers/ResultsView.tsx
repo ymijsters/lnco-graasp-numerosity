@@ -22,7 +22,7 @@ const ResultsView: FC = () => {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h3">Answers</Typography>
+      <Typography variant="h3">Results</Typography>
       <TableContainer component={Paper}>
         <Table
           sx={{ minWidth: 650, textAlign: 'center' }}
