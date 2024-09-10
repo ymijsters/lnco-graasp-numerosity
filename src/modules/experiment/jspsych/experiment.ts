@@ -128,7 +128,7 @@ const partofexp: (
     {
       type: jsPsychHtmlKeyboardResponse,
       stimulus:
-        '<div class="task-img"><p style="font-size: 3cm; margin: auto;">+</p></div>',
+        '<div class="task-img" style="margin: auto;"><p style="font-size: 3cm; margin: auto;">+</p></div>',
       choices: 'NO_KEYS',
       trial_duration: 500,
       on_start: (): void => {
