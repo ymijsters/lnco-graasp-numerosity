@@ -278,6 +278,8 @@ export async function run({
   const blocksPerHalf: number = input.duration.content || 5;
   const connectType: 'Serial Port' | 'USB' | null = 'Serial Port';
 
+  i18next.changeLanguage(input.language.language);
+
   // Pseudo state variable
   const deviceInfo: DeviceType = {
     device: null,

@@ -3,8 +3,10 @@ import { FC, ReactElement, createContext, useContext } from 'react';
 import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
 import {
+  AllowedLanguages,
   ConfigurationSettings,
   DurationSettings,
+  LanguageSettings,
   SequencingSettings,
 } from '../config/appSettings';
 
@@ -14,6 +16,7 @@ export type AllSettingsType = {
   configuration: ConfigurationSettings;
   duration: DurationSettings;
   sequencing: SequencingSettings;
+  language: LanguageSettings;
 };
 
 // default values for the data property of settings by name
@@ -28,10 +31,18 @@ const defaultSettingsValues: AllSettingsType = {
   sequencing: {
     content: 'random',
   },
+  language: {
+    language: AllowedLanguages.English,
+  },
 };
 
 // list of the settings names
-const ALL_SETTING_NAMES = ['configuration', 'duration', 'sequencing'] as const;
+const ALL_SETTING_NAMES = [
+  'configuration',
+  'duration',
+  'sequencing',
+  'language',
+] as const;
 
 // automatically generated types
 type AllSettingsNameType = (typeof ALL_SETTING_NAMES)[number];

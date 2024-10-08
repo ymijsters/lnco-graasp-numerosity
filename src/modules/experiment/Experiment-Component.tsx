@@ -10,7 +10,7 @@ import { run } from './jspsych/experiment';
 
 export const Experiment: FC = () => {
   const jsPsychRef = useRef<null | Promise<JsPsych>>(null);
-  const { configuration, sequencing, duration } = useSettings();
+  const { configuration, sequencing, duration, language } = useSettings();
   const { mutate: postAppData } = mutations.usePostAppData();
 
   const assetPath = {
@@ -123,7 +123,7 @@ export const Experiment: FC = () => {
     if (!jsPsychRef.current) {
       jsPsychRef.current = run({
         assetPaths: assetPath,
-        input: { configuration, sequencing, duration },
+        input: { configuration, sequencing, duration, language },
         environment: '',
         title: 'Numerosity Experiment on Graasp',
         version: '0.1',

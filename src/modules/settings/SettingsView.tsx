@@ -17,8 +17,10 @@ import Stack from '@mui/material/Stack';
 import { isEqual } from 'lodash';
 
 import {
+  AllowedLanguages,
   ConfigurationSettings,
   DurationSettings,
+  LanguageSettings,
   SequencingSettings,
 } from '../config/appSettings';
 import { useSettings } from '../context/SettingsContext';
@@ -29,6 +31,7 @@ const SettingsView: FC = () => {
     configuration: configurationSavedState,
     sequencing: sequencingSavedState,
     duration: durationSavedState,
+    language: languageSavedState,
     saveSettings,
   } = useSettings();
 
@@ -39,11 +42,14 @@ const SettingsView: FC = () => {
     useState<SequencingSettings>(sequencingSavedState);
   const [duration, setDuration] =
     useState<DurationSettings>(durationSavedState);
+  const [language, setLangauge] =
+    useState<LanguageSettings>(languageSavedState);
 
   const saveAllSettings = (): void => {
     saveSettings('configuration', configuration);
     saveSettings('sequencing', sequencing);
     saveSettings('duration', duration);
+    saveSettings('language', language);
   };
 
   useEffect(() => {
@@ -57,7 +63,8 @@ const SettingsView: FC = () => {
     if (
       isEqual(configurationSavedState, configuration) &&
       isEqual(sequencingSavedState, sequencing) &&
-      isEqual(durationSavedState, duration)
+      isEqual(durationSavedState, duration) &&
+      isEqual(languageSavedState, language)
     ) {
       return true;
     }
@@ -69,6 +76,8 @@ const SettingsView: FC = () => {
     sequencingSavedState,
     duration,
     durationSavedState,
+    language,
+    languageSavedState,
   ]);
 
   return (
@@ -129,6 +138,25 @@ const SettingsView: FC = () => {
             label="Objects"
           />
           <FormControlLabel value="people" control={<Radio />} label="People" />
+        </RadioGroup>
+      </Stack>
+      <Stack spacing={1}>
+        <Typography variant="h6">Language</Typography>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="random"
+          name="radio-buttons-group"
+          row
+          value={language.language}
+          onChange={(e) =>
+            setLangauge({
+              language: e.target.value as AllowedLanguages,
+            })
+          }
+        >
+          <FormControlLabel value="en" control={<Radio />} label="English" />
+          <FormControlLabel value="de" control={<Radio />} label="German" />
+          <FormControlLabel value="fr" control={<Radio />} label="French" />
         </RadioGroup>
       </Stack>
       <Box>
