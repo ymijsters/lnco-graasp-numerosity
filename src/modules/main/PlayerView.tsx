@@ -1,7 +1,7 @@
 import { Experiment } from '../experiment/Experiment-Component';
 
 const PlayerView = (): JSX.Element => (
-  <div>
+  <div className="player-view">
     <Experiment />
   </div>
 );

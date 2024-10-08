@@ -134,8 +134,8 @@ export const Experiment: FC = () => {
   }, []);
 
   return (
-    <div className="jspsych-content-wrapper">
-      <div id="jspsych-content" className="jspsych-content" />
+    <div className="jspsych-content-outer-wrapper">
+      <div id="jspsych-content" className="jspsych-content-outer" />
     </div>
   );
 };

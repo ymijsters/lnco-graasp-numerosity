@@ -145,7 +145,7 @@ export const fullScreenPlugin: (jsPsych: JsPsych) => Timeline = (
  *
  * @returns {number} - The scale factor determined by the device's pixel ratio.
  */
-function autoResize(): number {
+export function autoResize(): number {
   let remove: (() => void) | null = null;
 
   const updateSizes = (): number => {
@@ -172,15 +172,16 @@ function autoResize(): number {
  * @description Sets the sizes of images and containers based on a scaling factor.
  * @param {number} [scalingFactor=window.devicePixelRatio] - The scaling factor to apply.
  */
-function setSizes(scalingFactor: number = window.devicePixelRatio): void {
+export function setSizes(
+  scalingFactor: number = window.devicePixelRatio,
+): void {
   const style: HTMLElement =
     document.getElementById('scaling') || document.createElement('style');
-
-  const widthPixels: number = scalingFactor * 585.82677165;
+  const widthPixels: number = scalingFactor * 585.82677165 * 2;
   style.id = 'scaling';
   style.innerHTML = `.task-img, vid {
         width: ${widthPixels}px; 
-        height: ${(9 * widthPixels) / 16}px;
+        ${scalingFactor === 0 ? 'minWidth: 50%;' : ''}
     }
 `;
 
@@ -277,12 +278,6 @@ export const resize: (jsPsych: JsPsych) => Timeline = (
             resizeSkip?.parentNode?.removeChild(resizeSkip);
 
             setSizes(data.scale_factor);
-            document
-              .getElementById('jspsych-content')!
-              .removeAttribute('style');
-            document
-              .getElementById('jspsych-content')!
-              .removeAttribute('style');
           },
         },
       ],

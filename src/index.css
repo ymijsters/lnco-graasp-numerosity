@@ -7,14 +7,10 @@
 }
 
 @media all and (display-mode: fullscreen) {
-  html,
-  body {
+  .player-view {
     height: 100vh;
+    background-color: rgb(49, 49, 49);
   }
-}
-
-html {
-  background-color: #fafaff;
 }
 
 body {

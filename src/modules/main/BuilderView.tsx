@@ -28,6 +28,7 @@ const BuilderView = (): JSX.Element => {
       data-cy={BUILDER_VIEW_CY}
       style={{
         whiteSpace: 'pre-line',
+        backgroundColor: '#fffefe',
       }}
     >
       <Stack direction="column" spacing={2}>

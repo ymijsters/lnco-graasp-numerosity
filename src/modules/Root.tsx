@@ -50,7 +50,7 @@ declare module '@mui/material/styles' {
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#5050d2',
+      main: '#000',
     },
     secondary: pink,
     default: grey['500'],

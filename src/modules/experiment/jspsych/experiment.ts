@@ -23,6 +23,7 @@ import {
   fullScreenPlugin,
   generatePreloadStrings,
   resize,
+  setSizes,
 } from './setup';
 import { createButtonPage } from './utils';
 
@@ -128,7 +129,7 @@ const partofexp: (
     {
       type: jsPsychHtmlKeyboardResponse,
       stimulus:
-        '<div class="task-img" style="margin: auto;"><p style="font-size: 3cm; margin: auto; text-align: center; vertical-align: middle;">+</p></div>',
+        '<div class="task-img" style="display:flex; align-items:center; margin:0 auto;"><p style="font-size: 3cm; margin: auto;">+</p></div>',
       choices: 'NO_KEYS',
       trial_duration: 500,
       on_start: (): void => {
@@ -140,7 +141,7 @@ const partofexp: (
     {
       type: jsPsychHtmlKeyboardResponse,
       stimulus() {
-        return `<img class="task-img" src='./assets/num-task-imgs/${cntable}/num-${jsPsych.evaluateTimelineVariable('num')}-${jsPsych.evaluateTimelineVariable('id')}.png' alt='task image'>`;
+        return `<img class="task-img" style="margin: 0 auto;" src='./assets/num-task-imgs/${cntable}/num-${jsPsych.evaluateTimelineVariable('num')}-${jsPsych.evaluateTimelineVariable('id')}.png' alt='task image'>`;
       },
       choices: 'NO_KEYS',
       trial_duration: 250,
@@ -338,6 +339,8 @@ export async function run({
   timeline.push(fullScreenPlugin(jsPsych));
   if (!input.configuration.skipCalibration) {
     timeline.push(resize(jsPsych));
+  } else {
+    setSizes(1);
   }
   timeline.push(
     groupInstructions(jsPsych, expPartsCountables[0]),
