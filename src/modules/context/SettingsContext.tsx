@@ -24,6 +24,7 @@ const defaultSettingsValues: AllSettingsType = {
   configuration: {
     skipCalibration: false,
     forceDevice: false,
+    hardImageSize: '',
   },
   duration: {
     content: 4,

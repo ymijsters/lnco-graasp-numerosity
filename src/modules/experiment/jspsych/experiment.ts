@@ -23,6 +23,7 @@ import {
   fullScreenPlugin,
   generatePreloadStrings,
   resize,
+  setHardCodedSizes,
   setSizes,
 } from './setup';
 import { createButtonPage } from './utils';
@@ -297,7 +298,6 @@ export async function run({
     display_element: 'jspsych-content',
     on_finish: (): void => {
       onFinish(jsPsych.data.get(), input);
-      jsPsych.data.get().localSave('json', 'experiment-data.json');
     },
   });
 
@@ -325,6 +325,9 @@ export async function run({
     images: generatePreloadStrings(),
   });
 
+  // Add FullScreen Plugin
+  timeline.push(fullScreenPlugin(jsPsych));
+
   // 2. Add Device Connect pages
   if (connectType) {
     timeline.push(
@@ -337,13 +340,14 @@ export async function run({
     );
   }
 
-  // Add FullScreen Plugin
-  timeline.push(fullScreenPlugin(jsPsych));
-  if (!input.configuration.skipCalibration) {
-    timeline.push(resize(jsPsych));
-  } else {
+  if (input.configuration.hardImageSize) {
+    setHardCodedSizes(input.configuration.hardImageSize);
+  } else if (input.configuration.skipCalibration) {
     setSizes(1);
+  } else {
+    timeline.push(resize(jsPsych));
   }
+
   timeline.push(
     groupInstructions(jsPsych, expPartsCountables[0]),
     tipScreen(),

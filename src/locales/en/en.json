@@ -19,7 +19,7 @@
   "countablePeople": "people",
   "countableObjects": "objects",
   "instructionTitle": "Tutorial",
-  "instructionExample": "Here is an example of the task. As you can see, the picture is displayed for a very short time. You have to estimate the number of {{cntable}} that were displayed. Do not worry, estimation errors are expected.",
+  "instructionExample": "<b>Here is an example of the task. As you can see, the picture is displayed for a very short time. You have to estimate the number of {{cntable}} that were displayed. Do not worry, estimation errors are expected.</b>",
   "instructionBtnNext": "Next",
   "instructionBtnPrevious": "Previous",
   "instructionTexts": [
@@ -68,7 +68,7 @@
   "SETTINGS.BLOCKS.DESCRIPTION": "This experiment works in blocks of 4 trials, this settings sets the number of blocks tested per experiment condition.",
   "SETTINGS.BLOCKS.EXAMPLE": "Example: Blocks per condition = 2 means 2 x 4 people trials and 2 x 4 object trials.",
   "SETTINGS.EXPERIMENT.CONFIG": "Experiment Configuration",
-  "SETTINGS.SKIP.SCREEN.CALIBRATION":"Skip the screen calibration steps",
+  "SETTINGS.SKIP.SCREEN.CALIBRATION": "Skip the screen calibration steps",
   "SETTINGS.FORCE.DEVICE": "Force the usage of an external device with the experiment",
   "SETTINGS.SEQUENCING": "Set the experimental condition that should be shown first"
 }

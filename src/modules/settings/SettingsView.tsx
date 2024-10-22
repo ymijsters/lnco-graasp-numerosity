@@ -80,6 +80,13 @@ const SettingsView: FC = () => {
     languageSavedState,
   ]);
 
+  const errorHardImageSize =
+    !(!configuration.hardImageSize || configuration.hardImageSize === '') &&
+    !(
+      configuration.hardImageSize.endsWith('px') ||
+      configuration.hardImageSize.endsWith('%')
+    );
+
   return (
     <Stack spacing={2}>
       <Typography variant="h4">{t('SETTINGS.TITLE')}</Typography>
@@ -89,7 +96,9 @@ const SettingsView: FC = () => {
           control={<Switch />}
           label={t('SETTINGS.SKIP.SCREEN.CALIBRATION')}
           onChange={(e, checked) => {
-            setConfiguration({ ...configuration, skipCalibration: checked });
+            if (!errorHardImageSize) {
+              setConfiguration({ ...configuration, skipCalibration: checked });
+            }
           }}
           checked={configuration.skipCalibration}
         />
@@ -100,6 +109,20 @@ const SettingsView: FC = () => {
             setConfiguration({ ...configuration, forceDevice: checked });
           }}
           checked={configuration.forceDevice}
+        />
+        <Typography variant="body1">
+          {t('SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION')}
+        </Typography>
+        <TextField
+          value={configuration.hardImageSize}
+          label={t('SETTINGS.HARD.IMAGE.SIZE.FIELD')}
+          onChange={(e) =>
+            setConfiguration({
+              ...configuration,
+              hardImageSize: e.target.value,
+            })
+          }
+          error={errorHardImageSize}
         />
       </Stack>
       <Stack spacing={1}>

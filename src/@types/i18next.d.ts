@@ -1,4 +1,4 @@
-import { defaultNS, resources } from '../modules/experiment/old/i18n';
+import { defaultNS, resources } from '../modules/experiment/jspsych/i18n';
 
 declare module 'i18next' {
   interface CustomTypeOptions {

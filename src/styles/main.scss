@@ -12,13 +12,6 @@ h1 {
   font-size: 50px;
 }
 
-.jspsych-content-wrapper,
-.jspsych-content-outer-wrapper {
-  height: 100%;
-  align-items: center;
-  display: flex;
-}
-
 .jspsych-content-outer {
   text-align: center;
   margin: 0 auto; /* this is for overflowing content */
@@ -36,11 +29,10 @@ h1 {
   background-color: rgb(49, 49, 49);
   color: rgb(250, 250, 250);
   width: 100%;
-  display: flex;
   flex-direction: column;
   overflow-y: auto;
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 30px;
+  font-size: 1.5rem;
   line-height: 1.6em;
 }
 
@@ -48,10 +40,22 @@ h1 {
   outline: none;
 }
 
+.jspsych-content-wrapper,
+.jspsych-content-outer-wrapper {
+  height: 100%;
+}
+
 .jspsych-content {
   margin: 0 auto; /* this is for overflowing content */
-  padding-bottom: 100px;
-  width: 80%;
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.test-phase {
+  justify-content: center;
 }
 
 .jspsych-top {
@@ -243,11 +247,12 @@ button:hover {
 
 .inst-graphic {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   width: 100%;
-  height: 30vh;
+  height: 60vh;
 }
 
 .inst-monitor {
@@ -292,24 +297,24 @@ button:hover {
 /* Instruction page 4 - 3 monitors in a row */
 .group-monitors {
   position: relative;
-  width: 100%;
+  margin: 10px 0;
+  width: auto; /* Allow width to be determined by content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .group-monitors .inst-monitor {
-  width: 75%;
+  max-width: 100%;
+  height: auto;
 }
 
 .group-monitors .inst-screen {
-  width: 72%;
-  left: 14%;
-  transform: translateY(-130%);
+  max-width: 100%;
 }
 
 .group-monitors .input-example {
-  width: 70%;
-  left: 15%;
-  height: 65%;
-  transform: translateY(-140%);
+  max-width: 100%;
 }
 
 .input-example input {
@@ -330,6 +335,7 @@ button:hover {
 .jspsych-survey-multi-choice-question {
   width: 60%;
   margin: 0 auto;
+  margin-bottom: 100px !important;
 }
 
 .underlined {

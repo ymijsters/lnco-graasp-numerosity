@@ -9,6 +9,7 @@ export type DurationSettings = {
 export type ConfigurationSettings = {
   skipCalibration: boolean;
   forceDevice: boolean;
+  hardImageSize: string;
 };
 export enum AllowedLanguages {
   English = 'en',

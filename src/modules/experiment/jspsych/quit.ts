@@ -41,8 +41,6 @@ function generateQuitSurvey(): string {
  * @param {string} message - The message to be displayed on the end screen.
  */
 export function showEndScreen(message: string): void {
-  // eslint-disable-next-line no-console
-  console.log('Show end screen');
   const screen: HTMLElement = document.createElement('div');
 
   screen.classList.add('custom-overlay');

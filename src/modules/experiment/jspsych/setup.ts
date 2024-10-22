@@ -177,14 +177,33 @@ export function setSizes(
 ): void {
   const style: HTMLElement =
     document.getElementById('scaling') || document.createElement('style');
-  const widthPixels: number = scalingFactor * 585.82677165 * 2;
+  const widthPixels: number = scalingFactor * 585.82677165;
   style.id = 'scaling';
   style.innerHTML = `.task-img, vid {
         width: ${widthPixels}px; 
-        ${scalingFactor === 0 ? 'minWidth: 50%;' : ''}
+        ${scalingFactor < 2 ? 'minWidth: 50%;' : ''}
     }
 `;
 
+  if (!style.parentElement) {
+    document.head.appendChild(style);
+  } else {
+    console.error('Scaling factor cannot be applied.');
+  }
+}
+
+/**
+ * @function setHardCodedSizes
+ * @description Sets the sizes of images to a hard-coded pre-configured value.
+ * @param {string} [imageWidth] - Pre-configured width to apply.
+ */
+export function setHardCodedSizes(imageWidth: string): void {
+  const style: HTMLElement =
+    document.getElementById('scaling') || document.createElement('style');
+  style.id = 'scaling';
+  style.innerHTML = `.task-img, vid {
+        width: ${imageWidth}; 
+    }`;
   if (!style.parentElement) {
     document.head.appendChild(style);
   } else {

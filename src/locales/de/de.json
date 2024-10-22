@@ -19,7 +19,7 @@
   "countablePeople": "Personen",
   "countableObjects": "Objekte",
   "instructionTitle": "Anleitung",
-  "instructionExample": "Hier ein Beispiel für eine Aufgabe. Wie Sie sehen können, wird das Bild nur für eine sehr kurze Zeit angezeigt. Sie müssen die Anzahl der {{cntable}} schätzen, die angezeigt wurden. Keine Sorge, Schätzfehler werden erwartet.",
+  "instructionExample": "<b>Hier ein Beispiel für eine Aufgabe. Wie Sie sehen können, wird das Bild nur für eine sehr kurze Zeit angezeigt. Sie müssen die Anzahl der {{cntable}} schätzen, die angezeigt wurden. Keine Sorge, Schätzfehler werden erwartet.</b>",
   "instructionBtnNext": "Weiter",
   "instructionBtnPrevious": "Zurück",
   "instructionTexts": [

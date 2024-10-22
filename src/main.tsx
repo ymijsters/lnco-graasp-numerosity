@@ -12,7 +12,7 @@ import buildDatabase, { defaultMockContext, mockMembers } from './mocks/db';
 import Root from './modules/Root';
 
 Sentry.init({
-  integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+  integrations: [new Sentry.BrowserTracing()],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.

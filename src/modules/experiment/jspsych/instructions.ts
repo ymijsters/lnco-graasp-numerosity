@@ -49,7 +49,7 @@ function generateInstructionPages(cntable: 'people' | 'objects'): string[] {
   for (let pageNumber: number = 0; pageNumber < 3; pageNumber += 1) {
     pages.push(
       `          
-      <h3>${i18next.t('instructionTitle')}</h3><br>
+      <h3>${i18next.t('instructionTitle')}</h3>
       <div class="inst-container">
         <div class="inst-graphic">
           ${instructionImages[pageNumber]}
@@ -60,7 +60,7 @@ function generateInstructionPages(cntable: 'people' | 'objects'): string[] {
   }
   pages.push(
     `         
-    <h3>${i18next.t('instructionTitle')}</h3><br>
+    <h3>${i18next.t('instructionTitle')}</h3>
     <div class="inst-container">
       <div class="inst-graphic">
         <div class="group-monitors"">
@@ -78,7 +78,7 @@ function generateInstructionPages(cntable: 'people' | 'objects'): string[] {
   );
   pages.push(
     `
-        <h3>${i18next.t('instructionTitle')}</h3><br>
+        <h3>${i18next.t('instructionTitle')}</h3>
         <div class="inst-container">
           <div class="inst-graphic">
             ${instructionImages[2]}
@@ -88,7 +88,7 @@ function generateInstructionPages(cntable: 'people' | 'objects'): string[] {
   );
   pages.push(
     `
-    <h3>${i18next.t('instructionTitle')}</h3><br />
+    <h3>${i18next.t('instructionTitle')}</h3>
     <div class="inst-container">
       <div class="inst-graphic"> 
         <video muted autoplay loop preload="auto" src="./assets/instruction-media/${cntable}-vid.mp4" style="height: 45vh;">
@@ -96,7 +96,7 @@ function generateInstructionPages(cntable: 'people' | 'objects'): string[] {
         </video>
       </div>
       <p class="inst-text">${i18next.t('instructionExample', { cntable: langf.translateCountable(cntable) })}</p>
-    </div><br />`,
+    </div>`,
   );
   return pages;
 }

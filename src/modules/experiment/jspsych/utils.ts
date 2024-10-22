@@ -5,6 +5,7 @@ type ButtonTrial = {
   type: typeof HtmlButtonResponsePlugin;
   stimulus: string;
   choices: string[];
+  on_finish: () => void;
 };
 
 /**
@@ -41,6 +42,17 @@ export function createButtonPage(
     type: HtmlButtonResponsePlugin,
     stimulus: `<b>${pageText}</b><br><br>`,
     choices: [btnText],
+    on_finish: () => {
+      const jsPsychContent = document.querySelector('.jspsych-content');
+      if (jsPsychContent) {
+        if (!jsPsychContent.classList.contains('test-phase')) {
+          // If currently in the instruction phase, switch to the test phase
+          jsPsychContent.classList.add('test-phase');
+        } else {
+          jsPsychContent.classList.remove('test-phase');
+        }
+      }
+    },
   };
 }
 
