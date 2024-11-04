@@ -110,7 +110,7 @@ const SettingsView: FC = () => {
           }}
           checked={configuration.forceDevice}
         />
-        <Typography variant="body1">
+        <Typography variant="h6">
           {t('SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION')}
         </Typography>
         <TextField
@@ -124,6 +124,37 @@ const SettingsView: FC = () => {
           }
           error={errorHardImageSize}
         />
+        <Stack spacing={1}>
+          <Typography variant="h6">{t('SETTINGS.PHOTODIODE_LABEL')}</Typography>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="random"
+            name="radio-buttons-group"
+            row
+            value={configuration.usePhotoDiode}
+            onChange={(e) =>
+              setConfiguration({
+                ...configuration,
+                usePhotoDiode: e.target.value as
+                  | 'top-left'
+                  | 'top-right'
+                  | 'off',
+              })
+            }
+          >
+            <FormControlLabel
+              value="top-left"
+              control={<Radio />}
+              label="top-left"
+            />
+            <FormControlLabel
+              value="top-right"
+              control={<Radio />}
+              label="top-right"
+            />
+            <FormControlLabel value="off" control={<Radio />} label="off" />
+          </RadioGroup>
+        </Stack>
       </Stack>
       <Stack spacing={1}>
         <Typography variant="h6">{t('SETTINGS.BLOCKS.TITLE')}</Typography>

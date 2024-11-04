@@ -7,19 +7,10 @@ import { CssBaseline, ThemeProvider, createTheme, styled } from '@mui/material';
 import { grey, orange, pink } from '@mui/material/colors';
 import { StyledEngineProvider } from '@mui/material/styles';
 
-import {
-  GraaspContextDevTool,
-  WithLocalContext,
-  WithTokenContext,
-} from '@graasp/apps-query-client';
+import { WithLocalContext, WithTokenContext } from '@graasp/apps-query-client';
 
-import {
-  QueryClientProvider,
-  ReactQueryDevtools,
-  hooks,
-  queryClient,
-} from '@/config/queryClient';
-import { defaultMockContext, mockMembers } from '@/mocks/db';
+import { QueryClientProvider, hooks, queryClient } from '@/config/queryClient';
+import { defaultMockContext } from '@/mocks/db';
 import Loader from '@/modules/common/Loader';
 import { useObjectState } from '@/utils/hooks';
 
@@ -72,7 +63,7 @@ const RootDiv = styled('div')({
 });
 
 const Root: FC = () => {
-  const [mockContext, setMockContext] = useObjectState(defaultMockContext);
+  const [mockContext] = useObjectState(defaultMockContext);
 
   return (
     <RootDiv>
@@ -106,18 +97,8 @@ const Root: FC = () => {
                   <I18nextProvider i18n={i18Next}>
                     <App />
                   </I18nextProvider>
-                  {import.meta.env.DEV && (
-                    <GraaspContextDevTool
-                      members={mockMembers}
-                      context={mockContext}
-                      setContext={setMockContext}
-                    />
-                  )}
                 </WithTokenContext>
               </WithLocalContext>
-              {import.meta.env.DEV && (
-                <ReactQueryDevtools position="bottom-left" />
-              )}
             </QueryClientProvider>
           </ErrorBoundary>
         </ThemeProvider>

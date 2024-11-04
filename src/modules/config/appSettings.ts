@@ -10,6 +10,7 @@ export type ConfigurationSettings = {
   skipCalibration: boolean;
   forceDevice: boolean;
   hardImageSize: string;
+  usePhotoDiode: 'top-left' | 'top-right' | 'off';
 };
 export enum AllowedLanguages {
   English = 'en',

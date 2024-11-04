@@ -25,6 +25,7 @@ const defaultSettingsValues: AllSettingsType = {
     skipCalibration: false,
     forceDevice: false,
     hardImageSize: '',
+    usePhotoDiode: 'off',
   },
   duration: {
     content: 4,

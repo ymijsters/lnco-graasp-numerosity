@@ -70,5 +70,8 @@
   "SETTINGS.EXPERIMENT.CONFIG": "Experiment Configuration",
   "SETTINGS.SKIP.SCREEN.CALIBRATION": "Skip the screen calibration steps",
   "SETTINGS.FORCE.DEVICE": "Force the usage of an external device with the experiment",
-  "SETTINGS.SEQUENCING": "Set the experimental condition that should be shown first"
+  "SETTINGS.SEQUENCING": "Set the experimental condition that should be shown first",
+  "SETTINGS.PHOTODIODE_LABEL": "Will you use a photodiode?",
+  "SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION": "Set a fixed size for numerosity image (end with px or %)",
+  "SETTINGS.HARD.IMAGE.SIZE.FIELD": "Fixed Image Size"
 }

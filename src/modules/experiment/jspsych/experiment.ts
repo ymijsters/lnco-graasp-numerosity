@@ -94,6 +94,7 @@ const partofexp: (
   jsPsych: JsPsych,
   cntable: 'people' | 'objects',
   nbBlocks: number,
+  usePhotoDiode: 'top-left' | 'top-right' | 'off',
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -105,6 +106,7 @@ const partofexp: (
   jsPsych: JsPsych,
   cntable: 'people' | 'objects',
   nbBlocks: number,
+  usePhotoDiode: 'top-left' | 'top-right' | 'off',
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -129,8 +131,11 @@ const partofexp: (
     // Crosshair shown before each image for 500ms.
     {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus:
-        '<div class="task-img" style="display:flex; align-items:center; margin:0 auto;"><p style="font-size: 3cm; margin: auto;">+</p></div>',
+      stimulus: `
+        <div>
+          <div class="task-img" style="display:flex; align-items:center; margin:0 auto;"><p style="font-size: 3cm; margin: auto;">+</p></div>
+          <div class='photo-diode photo-diode-black ${usePhotoDiode === 'top-left' ? 'top-left' : 'top-right'} ${usePhotoDiode === 'off' ? 'photo-diode-hide' : ''}'/>
+        </div>`,
       choices: 'NO_KEYS',
       trial_duration: 500,
       on_start: (): void => {
@@ -142,7 +147,11 @@ const partofexp: (
     {
       type: jsPsychHtmlKeyboardResponse,
       stimulus() {
-        return `<img class="task-img" style="margin: 0 auto;" src='./assets/num-task-imgs/${cntable}/num-${jsPsych.evaluateTimelineVariable('num')}-${jsPsych.evaluateTimelineVariable('id')}.png' alt='task image'>`;
+        const html = `<div>
+          <img class="task-img" style="margin: 0 auto;" src='./assets/num-task-imgs/${cntable}/num-${jsPsych.evaluateTimelineVariable('num')}-${jsPsych.evaluateTimelineVariable('id')}.png' alt='task image'/>
+          <div class='photo-diode photo-diode-white ${usePhotoDiode === 'top-left' ? 'top-left' : 'top-right'} ${usePhotoDiode === 'off' ? 'photo-diode-hide' : ''}'/>
+        </div>`;
+        return html;
       },
       choices: 'NO_KEYS',
       trial_duration: 250,
@@ -155,7 +164,7 @@ const partofexp: (
     // Blackscreen after image
     {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: '',
+      stimulus: `<div class='photo-diode photo-diode-black ${usePhotoDiode === 'top-left' ? 'top-left' : 'top-right'} ${usePhotoDiode === 'off' ? 'photo-diode-hide' : ''}'/>`,
       choices: 'NO_KEYS',
       trial_duration: 1000,
       on_start: (): void => {
@@ -355,7 +364,13 @@ export async function run({
       i18next.t('experimentStart'),
       i18next.t('experimentStartBtn'),
     ),
-    partofexp(jsPsych, expPartsCountables[0], blocksPerHalf, deviceInfo),
+    partofexp(
+      jsPsych,
+      expPartsCountables[0],
+      blocksPerHalf,
+      input.configuration.usePhotoDiode,
+      deviceInfo,
+    ),
     createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
     groupInstructions(jsPsych, expPartsCountables[1]),
     tipScreen(),
@@ -363,7 +378,13 @@ export async function run({
       i18next.t('experimentStart'),
       i18next.t('experimentStartBtn'),
     ),
-    partofexp(jsPsych, expPartsCountables[1], blocksPerHalf, deviceInfo),
+    partofexp(
+      jsPsych,
+      expPartsCountables[1],
+      blocksPerHalf,
+      input.configuration.usePhotoDiode,
+      deviceInfo,
+    ),
   );
 
   await jsPsych.run(timeline);

@@ -224,30 +224,33 @@ export const resize: (jsPsych: JsPsych) => Timeline = (
     {
       type: jsPsychSurveyHtmlForm,
       preamble: ` <div class="resize-page"> 
-                        <h3>${i18next.t('barResizeTitle')}</h3>
-                        <p style="text-align: center;">${i18next.t('barResizeInstructions')}</p>
-                        <br>
-                        <div id="resize-bar"></div>
-                        <br>
-                      </div>`,
+                    <h3>${i18next.t('barResizeTitle')}</h3>
+                    <p style="text-align: center;">${i18next.t('barResizeInstructions')}</p>
+                    <br>
+                    <div id="resize-bar"></div>
+                    <br>
+                  </div>`,
       html: `
-                <div>
+                <div class='bar-size-input-field'>
                   <labelfor="cm-bar-input">${i18next.t('barResizeInputLabel')}</label>
                   <input name="input" id="cm-bar-input" type="number" min="0.001" step="0.001" placeholder="cm" required style="font-size: larger; margin-left: 5%; width: 30%;">
                 </div>
-                <br>
-              </div>
 `,
       autofocus: 'cm-bar-input',
       button_label: i18next.t('resizeBtn'),
       on_load: (): void => {
         const skipBar: HTMLElement = document.createElement('div');
         skipBar.id = 'skip-bar-items';
-        skipBar.innerHTML = `  <div class="warning-box">
-                                    <h1 class="warning">!</h1><p>${i18next.t('noRuler')}</p>
-                                  </div>
-                                  <button class="jspsych-btn" type="button" id="skip-bar-resize-btn">${i18next.t('noRulerBtn')}</button>`;
-        document.getElementById('jspsych-content')!.appendChild(skipBar);
+        skipBar.innerHTML = ` 
+          <div class='skip-bar-resize'>
+            <div class="warning-box">
+              <h1 class="warning">!</h1><p>${i18next.t('noRuler')}</p>
+            </div>
+            <button class="jspsych-btn" type="button" id="skip-bar-resize-btn">${i18next.t('noRulerBtn')}</button>
+          </div>`;
+        document
+          .getElementById('jspsych-survey-html-form')!
+          .appendChild(skipBar);
         document
           .getElementById('skip-bar-resize-btn')!
           .addEventListener('click', (): void => {
@@ -295,8 +298,9 @@ export const resize: (jsPsych: JsPsych) => Timeline = (
             const resizeSkip = document.getElementById('skip-resize');
             // Remove the element from its parent node
             resizeSkip?.parentNode?.removeChild(resizeSkip);
-
             setSizes(data.scale_factor);
+            const contentDiv = document.getElementById('jspsych-content');
+            contentDiv?.style.removeProperty('transform');
           },
         },
       ],
