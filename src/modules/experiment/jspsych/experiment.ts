@@ -15,8 +15,9 @@ import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
 import { AllSettingsType } from '@/modules/context/SettingsContext';
 
-// Import styles
 import { groupInstructions, tipScreen } from './instructions';
+// Import styles
+import * as langf from './languages.js';
 import { showEndScreen } from './quit';
 import {
   deviceConnectPages,
@@ -179,7 +180,7 @@ const partofexp: (
     // Survey to ask how many countables (people/objects) were estimated.
     {
       type: jsPsychSurveyHtmlForm,
-      preamble: `How many ${cntable} were in the virtual room?`,
+      preamble: `${i18next.t('inputPreable', { cntable: langf.translateCountable(cntable) })}`,
       html: `<input type="number" label="numerosity input" name="num-input" id="task-input" required min="0" step="1" placeholder="${i18next.t('inputPlaceholder')}"><br>`,
       autofocus: 'task-input',
       buttonLabel: i18next.t('estimateSubmitBtn'),

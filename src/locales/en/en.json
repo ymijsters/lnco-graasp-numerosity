@@ -41,6 +41,7 @@
   "experimentStartBtn": "Begin",
   "inputInfo": "Please write a whole number",
   "inputPlaceholder": " answer here",
+  "inputPreable": "How many {{cntable}} were in the virtual room?",
   "estimateSubmitBtn": "Continue",
   "firstHalfEnd": "You have reached the end of the first part of the experiment. Instructions have changed for the second half. Click the button below to proceed to the second half.",
   "repeatInstructions": "Click here to read the instructions again",
