@@ -21,9 +21,11 @@ import {
   ConfigurationSettings,
   DurationSettings,
   LanguageSettings,
+  NextStepSettings,
   SequencingSettings,
 } from '../config/appSettings';
 import { useSettings } from '../context/SettingsContext';
+import NextStepSettingsView from './NextStepSettings';
 
 const SettingsView: FC = () => {
   const { t } = useTranslation();
@@ -32,6 +34,7 @@ const SettingsView: FC = () => {
     sequencing: sequencingSavedState,
     duration: durationSavedState,
     language: languageSavedState,
+    nextStepSettings: nextStepSettingsSavedState,
     saveSettings,
   } = useSettings();
 
@@ -44,17 +47,20 @@ const SettingsView: FC = () => {
     useState<DurationSettings>(durationSavedState);
   const [language, setLangauge] =
     useState<LanguageSettings>(languageSavedState);
+  const [nextStepSettings, setNextStepSettings] = useState<NextStepSettings>(
+    nextStepSettingsSavedState,
+  );
 
   const saveAllSettings = (): void => {
     saveSettings('configuration', configuration);
     saveSettings('sequencing', sequencing);
     saveSettings('duration', duration);
     saveSettings('language', language);
+    saveSettings('nextStepSettings', nextStepSettings);
   };
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log({ configuration, sequencing, duration });
     setDuration(durationSavedState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [durationSavedState]);
@@ -64,7 +70,8 @@ const SettingsView: FC = () => {
       isEqual(configurationSavedState, configuration) &&
       isEqual(sequencingSavedState, sequencing) &&
       isEqual(durationSavedState, duration) &&
-      isEqual(languageSavedState, language)
+      isEqual(languageSavedState, language) &&
+      isEqual(nextStepSettingsSavedState, nextStepSettings)
     ) {
       return true;
     }
@@ -78,6 +85,8 @@ const SettingsView: FC = () => {
     durationSavedState,
     language,
     languageSavedState,
+    nextStepSettings,
+    nextStepSettingsSavedState,
   ]);
 
   const errorHardImageSize =
@@ -101,6 +110,14 @@ const SettingsView: FC = () => {
             }
           }}
           checked={configuration.skipCalibration}
+        />
+        <FormControlLabel
+          control={<Switch />}
+          label={t('SETTINGS.SKIP.DEVICE')}
+          onChange={(e, checked) => {
+            setConfiguration({ ...configuration, skipDevice: checked });
+          }}
+          checked={configuration.skipDevice}
         />
         <FormControlLabel
           control={<Switch />}
@@ -155,6 +172,17 @@ const SettingsView: FC = () => {
             <FormControlLabel value="off" control={<Radio />} label="off" />
           </RadioGroup>
         </Stack>
+        <FormControlLabel
+          control={<Switch />}
+          label={t('SETTINGS.CONFIDENCE.QUESTION')}
+          onChange={(e, checked) => {
+            setConfiguration({
+              ...configuration,
+              addConfidenceQuestion: checked,
+            });
+          }}
+          checked={configuration.addConfidenceQuestion}
+        />
       </Stack>
       <Stack spacing={1}>
         <Typography variant="h6">{t('SETTINGS.BLOCKS.TITLE')}</Typography>
@@ -213,6 +241,12 @@ const SettingsView: FC = () => {
           <FormControlLabel value="fr" control={<Radio />} label="French" />
         </RadioGroup>
       </Stack>
+      <NextStepSettingsView
+        nextStepSettings={nextStepSettings}
+        onChange={(newSetting: NextStepSettings) =>
+          setNextStepSettings(newSetting)
+        }
+      />
       <Box>
         <Button
           variant="contained"

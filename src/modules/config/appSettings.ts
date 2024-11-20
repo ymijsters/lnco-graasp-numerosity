@@ -8,9 +8,11 @@ export type DurationSettings = {
 
 export type ConfigurationSettings = {
   skipCalibration: boolean;
+  skipDevice: boolean;
   forceDevice: boolean;
   hardImageSize: string;
   usePhotoDiode: 'top-left' | 'top-right' | 'off';
+  addConfidenceQuestion: boolean;
 };
 export enum AllowedLanguages {
   English = 'en',
@@ -20,4 +22,12 @@ export enum AllowedLanguages {
 
 export type LanguageSettings = {
   language: AllowedLanguages;
+};
+
+export type NextStepSettings = {
+  linkToNextPage: boolean;
+  title: string;
+  description: string;
+  link: string;
+  linkText: string;
 };

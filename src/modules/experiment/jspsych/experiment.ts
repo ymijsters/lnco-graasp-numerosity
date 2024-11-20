@@ -10,6 +10,10 @@
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import PreloadPlugin from '@jspsych/plugin-preload';
 import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import surveyLikert from '@jspsych/plugin-survey-likert';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Marked, Renderer } from '@ts-stack/markdown';
 import i18next from 'i18next';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
@@ -40,6 +44,17 @@ export type DeviceType = {
   ) => Promise<void>;
 };
 export type ConnectType = 'Serial Port' | 'USB' | null;
+
+Marked.setOptions({
+  renderer: new Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+});
 
 /**
  * @function generateTimelineVars
@@ -96,6 +111,7 @@ const partofexp: (
   cntable: 'people' | 'objects',
   nbBlocks: number,
   usePhotoDiode: 'top-left' | 'top-right' | 'off',
+  confidenceQuestion: boolean,
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -108,6 +124,7 @@ const partofexp: (
   cntable: 'people' | 'objects',
   nbBlocks: number,
   usePhotoDiode: 'top-left' | 'top-right' | 'off',
+  confidenceQuestion: boolean,
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -211,6 +228,28 @@ const partofexp: (
           ) / 1000000;
       },
     },
+    {
+      timeline: [
+        {
+          type: surveyLikert,
+          questions: [
+            {
+              prompt: 'How confidence are you about your response?',
+              labels: [
+                '1 - Not Confidenct',
+                '2',
+                '3',
+                '4',
+                '5 - Very Confident',
+              ],
+            },
+          ],
+        },
+      ],
+      conditional_function() {
+        return confidenceQuestion;
+      },
+    },
   ],
 
   // Generate random Timeline variables (pick random images for each numerosity).
@@ -253,6 +292,21 @@ const partofexp: (
       return newTimelines;
     },
   },
+});
+
+/**
+ *
+ * @returns Returns a simple welcome screen that automatically triggers fullscreen when the start button is pressed
+ */
+const getEndPage = (
+  title: string,
+  description: string,
+  link: string,
+  linkText: string,
+): Timeline => ({
+  type: jsPsychHtmlKeyboardResponse,
+  choices: 'NO_KEYS',
+  stimulus: `<div class='sd-html'><h5>${title}</h5><p>${Marked.parse(description)}</p><a class='link-to-experiment' target="_parent" href=${link}>${linkText}</a></div>`,
 });
 
 /**
@@ -339,7 +393,7 @@ export async function run({
   timeline.push(fullScreenPlugin(jsPsych));
 
   // 2. Add Device Connect pages
-  if (connectType) {
+  if (connectType && !input.configuration.skipDevice) {
     timeline.push(
       deviceConnectPages(
         jsPsych,
@@ -370,9 +424,15 @@ export async function run({
       expPartsCountables[0],
       blocksPerHalf,
       input.configuration.usePhotoDiode,
+      input.configuration.addConfidenceQuestion,
       deviceInfo,
     ),
-    createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
+    {
+      ...createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
+      onFinish() {
+        onFinish(jsPsych.data.get(), input);
+      },
+    },
     groupInstructions(jsPsych, expPartsCountables[1]),
     tipScreen(),
     createButtonPage(
@@ -384,9 +444,24 @@ export async function run({
       expPartsCountables[1],
       blocksPerHalf,
       input.configuration.usePhotoDiode,
+      input.configuration.addConfidenceQuestion,
       deviceInfo,
     ),
   );
+
+  if (input.nextStepSettings.linkToNextPage) {
+    timeline.push({
+      ...getEndPage(
+        input.nextStepSettings.title,
+        input.nextStepSettings.description,
+        input.nextStepSettings.link,
+        input.nextStepSettings.linkText,
+      ),
+      on_finish() {
+        onFinish(jsPsych.data.get(), input);
+      },
+    });
+  }
 
   await jsPsych.run(timeline);
 
@@ -396,7 +471,7 @@ export async function run({
 
   if (jsPsych.data.get().last(2).values()[0].trialType === 'quit-survey') {
     showEndScreen(i18next.t('abortedMessage'));
-  } else {
+  } else if (!input.nextStepSettings.linkToNextPage) {
     showEndScreen(i18next.t('endMessage'));
   }
 
