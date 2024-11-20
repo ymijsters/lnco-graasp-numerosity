@@ -127,6 +127,28 @@ const SettingsView: FC = () => {
           }}
           checked={configuration.forceDevice}
         />
+        <TextField
+          value={configuration.continueButtonDelay}
+          label={t('SETTINGS.CONTINUE_BUTTON_DELAY')}
+          type="number"
+          onChange={(e) =>
+            setConfiguration({
+              ...configuration,
+              continueButtonDelay: Number(e.target.value),
+            })
+          }
+        />
+        <FormControlLabel
+          control={<Switch />}
+          label={t('SETTINGS.CONFIDENCE.QUESTION')}
+          onChange={(e, checked) => {
+            setConfiguration({
+              ...configuration,
+              addConfidenceQuestion: checked,
+            });
+          }}
+          checked={configuration.addConfidenceQuestion}
+        />
         <Typography variant="h6">
           {t('SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION')}
         </Typography>
@@ -172,17 +194,6 @@ const SettingsView: FC = () => {
             <FormControlLabel value="off" control={<Radio />} label="off" />
           </RadioGroup>
         </Stack>
-        <FormControlLabel
-          control={<Switch />}
-          label={t('SETTINGS.CONFIDENCE.QUESTION')}
-          onChange={(e, checked) => {
-            setConfiguration({
-              ...configuration,
-              addConfidenceQuestion: checked,
-            });
-          }}
-          checked={configuration.addConfidenceQuestion}
-        />
       </Stack>
       <Stack spacing={1}>
         <Typography variant="h6">{t('SETTINGS.BLOCKS.TITLE')}</Typography>

@@ -235,6 +235,7 @@ const partofexp: (
           questions: [
             {
               prompt: 'How confidence are you about your response?',
+              required: true,
               labels: [
                 '1 - Not Confidenct',
                 '2',
@@ -413,7 +414,11 @@ export async function run({
   }
 
   timeline.push(
-    groupInstructions(jsPsych, expPartsCountables[0]),
+    groupInstructions(
+      jsPsych,
+      expPartsCountables[0],
+      input.configuration.continueButtonDelay,
+    ),
     tipScreen(),
     createButtonPage(
       i18next.t('experimentStart'),
@@ -427,13 +432,12 @@ export async function run({
       input.configuration.addConfidenceQuestion,
       deviceInfo,
     ),
-    {
-      ...createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
-      onFinish() {
-        onFinish(jsPsych.data.get(), input);
-      },
-    },
-    groupInstructions(jsPsych, expPartsCountables[1]),
+    createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
+    groupInstructions(
+      jsPsych,
+      expPartsCountables[1],
+      input.configuration.continueButtonDelay,
+    ),
     tipScreen(),
     createButtonPage(
       i18next.t('experimentStart'),
@@ -457,7 +461,7 @@ export async function run({
         input.nextStepSettings.link,
         input.nextStepSettings.linkText,
       ),
-      on_finish() {
+      on_load() {
         onFinish(jsPsych.data.get(), input);
       },
     });

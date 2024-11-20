@@ -108,7 +108,10 @@ function generateInstructionPages(cntable: 'people' | 'objects'): string[] {
  * @param { 'people' | 'objects' } cntable - The type of countable (people or objects)
  * @returns { Timeline } - Timeline for instructions
  */
-function instructions(cntable: 'people' | 'objects'): Timeline {
+function instructions(
+  cntable: 'people' | 'objects',
+  continueButtonDelay: number,
+): Timeline {
   return {
     timeline: [
       {
@@ -117,6 +120,28 @@ function instructions(cntable: 'people' | 'objects'): Timeline {
         button_label_next: i18next.t('instructionBtnNext'),
         button_label_previous: i18next.t('instructionBtnPrevious'),
         show_clickable_nav: true,
+        on_page_change() {
+          const button = document.getElementById(
+            'jspsych-instructions-next',
+          ) as HTMLButtonElement;
+          if (button && continueButtonDelay) {
+            button.disabled = true;
+            setTimeout(() => {
+              button.disabled = false;
+            }, continueButtonDelay * 1000);
+          }
+        },
+        on_load() {
+          const button = document.getElementById(
+            'jspsych-instructions-next',
+          ) as HTMLButtonElement;
+          if (button && continueButtonDelay) {
+            button.disabled = true;
+            setTimeout(() => {
+              button.disabled = false;
+            }, continueButtonDelay * 1000);
+          }
+        },
       },
     ],
   };
@@ -203,14 +228,16 @@ const returnPage: (
 export const groupInstructions: (
   jsPsych: JsPsych,
   cntable: 'people' | 'objects',
+  continueButtonDelay: number,
   secondHalf?: boolean,
 ) => Timeline = (
   jsPsych: JsPsych,
   cntable: 'people' | 'objects',
+  continueButtonDelay: number,
   secondHalf: boolean = false,
 ): Timeline => ({
   timeline: [
-    instructions(cntable),
+    instructions(cntable, continueButtonDelay),
     instructionQuiz(jsPsych, cntable, secondHalf),
     returnPage(jsPsych, cntable),
   ],

@@ -77,6 +77,7 @@
   "SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION": "Set a fixed size for numerosity image (end with px or %)",
   "SETTINGS.HARD.IMAGE.SIZE.FIELD": "Fixed Image Size",
   "SETTINGS.CONFIDENCE.QUESTION": "Add a confidence question after each trial",
+  "SETTINGS.CONTINUE_BUTTON_DELAY": "Delay before enabling continue button (in seconds)",
   "SETTINGS.NEXT_STEP.LABEL_NEXT_STEP": "Add a custom end page",
   "SETTINGS.NEXT_STEP.LINK_PAGE_LABEL": "Custom End Page Settings",
   "SETTINGS.NEXT_STEP.TITLE_LABEL": "Title",

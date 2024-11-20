@@ -30,6 +30,7 @@ const defaultSettingsValues: AllSettingsType = {
     hardImageSize: '',
     usePhotoDiode: 'off',
     addConfidenceQuestion: false,
+    continueButtonDelay: 0,
   },
   duration: {
     content: 4,

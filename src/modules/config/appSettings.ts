@@ -13,6 +13,7 @@ export type ConfigurationSettings = {
   hardImageSize: string;
   usePhotoDiode: 'top-left' | 'top-right' | 'off';
   addConfidenceQuestion: boolean;
+  continueButtonDelay: number;
 };
 export enum AllowedLanguages {
   English = 'en',
