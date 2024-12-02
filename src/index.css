@@ -1,4 +1,8 @@
 /* define colors */
+.jspsych-display-element {
+  min-height: 800px;
+}
+
 :root {
   --graasp-primary: #5050d2;
   --code-bg: rgba(197, 197, 197, 0.37);
