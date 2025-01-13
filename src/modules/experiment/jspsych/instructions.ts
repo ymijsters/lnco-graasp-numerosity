@@ -108,7 +108,10 @@ function generateInstructionPages(cntable: 'people' | 'objects'): string[] {
  * @param { 'people' | 'objects' } cntable - The type of countable (people or objects)
  * @returns { Timeline } - Timeline for instructions
  */
-function instructions(cntable: 'people' | 'objects'): Timeline {
+function instructions(
+  cntable: 'people' | 'objects',
+  continueButtonDelay: number,
+): Timeline {
   return {
     timeline: [
       {
@@ -117,6 +120,28 @@ function instructions(cntable: 'people' | 'objects'): Timeline {
         button_label_next: i18next.t('instructionBtnNext'),
         button_label_previous: i18next.t('instructionBtnPrevious'),
         show_clickable_nav: true,
+        on_page_change() {
+          const button = document.getElementById(
+            'jspsych-instructions-next',
+          ) as HTMLButtonElement;
+          if (button && continueButtonDelay) {
+            button.disabled = true;
+            setTimeout(() => {
+              button.disabled = false;
+            }, continueButtonDelay * 1000);
+          }
+        },
+        on_load() {
+          const button = document.getElementById(
+            'jspsych-instructions-next',
+          ) as HTMLButtonElement;
+          if (button && continueButtonDelay) {
+            button.disabled = true;
+            setTimeout(() => {
+              button.disabled = false;
+            }, continueButtonDelay * 1000);
+          }
+        },
       },
     ],
   };
@@ -140,7 +165,7 @@ const instructionQuiz: (
     {
       type: jsPsychSurveyMultiChoice,
       questions: langf.quizQuestions(cntable),
-      preamble: `<b>${i18next.t('quizPreamble')}</b><br><br><button id="quiz-repeat-btn" class="jspsych-btn">${i18next.t('repeatInstructions')}</button>`,
+      preamble: `<h3>${i18next.t('quizPreamble')}</h3><br><br><button id="quiz-repeat-btn" class="jspsych-btn">${i18next.t('repeatInstructions')}</button>`,
       button_label: i18next.t('estimateSubmitBtn'),
     },
   ],
@@ -203,14 +228,16 @@ const returnPage: (
 export const groupInstructions: (
   jsPsych: JsPsych,
   cntable: 'people' | 'objects',
+  continueButtonDelay: number,
   secondHalf?: boolean,
 ) => Timeline = (
   jsPsych: JsPsych,
   cntable: 'people' | 'objects',
+  continueButtonDelay: number,
   secondHalf: boolean = false,
 ): Timeline => ({
   timeline: [
-    instructions(cntable),
+    instructions(cntable, continueButtonDelay),
     instructionQuiz(jsPsych, cntable, secondHalf),
     returnPage(jsPsych, cntable),
   ],
@@ -236,7 +263,7 @@ export function tipScreen(): Timeline {
     timeline: [
       {
         type: HtmlButtonResponsePlugin,
-        stimulus: `<b>${i18next.t('tipTitle')}</b><br><img src="./assets/instruction-media/tip.png" alt='tip image' style="width: 20vw;"><br>${i18next.t('tipDescription')}<br><br>`,
+        stimulus: `<h3>${i18next.t('tipTitle')}</h3><br><img src="./assets/instruction-media/tip.png" alt='tip image' style="width: 20vw;"><br><p>${i18next.t('tipDescription')}</p><br><br>`,
         choices: [i18next.t('tipBtnTxt')],
       },
     ],

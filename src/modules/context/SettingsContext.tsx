@@ -7,6 +7,7 @@ import {
   ConfigurationSettings,
   DurationSettings,
   LanguageSettings,
+  NextStepSettings,
   SequencingSettings,
 } from '../config/appSettings';
 
@@ -17,15 +18,20 @@ export type AllSettingsType = {
   duration: DurationSettings;
   sequencing: SequencingSettings;
   language: LanguageSettings;
+  nextStepSettings: NextStepSettings;
 };
 
 // default values for the data property of settings by name
 const defaultSettingsValues: AllSettingsType = {
   configuration: {
     skipCalibration: false,
+    skipDevice: false,
     forceDevice: false,
     hardImageSize: '',
     usePhotoDiode: 'off',
+    addConfidenceQuestion: false,
+    continueButtonDelay: 0,
+    fontSize: 'normal',
   },
   duration: {
     content: 4,
@@ -36,6 +42,13 @@ const defaultSettingsValues: AllSettingsType = {
   language: {
     language: AllowedLanguages.English,
   },
+  nextStepSettings: {
+    title: '',
+    description: '',
+    linkToNextPage: true,
+    link: '',
+    linkText: '',
+  },
 };
 
 // list of the settings names
@@ -44,6 +57,7 @@ const ALL_SETTING_NAMES = [
   'duration',
   'sequencing',
   'language',
+  'nextStepSettings',
 ] as const;
 
 // automatically generated types

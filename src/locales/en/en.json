@@ -40,7 +40,7 @@
   "experimentStart": "The experiment will begin immediately after clicking the button below.",
   "experimentStartBtn": "Begin",
   "inputInfo": "Please write a whole number",
-  "inputPlaceholder": " answer here",
+  "inputPlaceholder": "Answer here",
   "inputPreable": "How many {{cntable}} were in the virtual room?",
   "estimateSubmitBtn": "Continue",
   "firstHalfEnd": "You have reached the end of the first part of the experiment. Instructions have changed for the second half. Click the button below to proceed to the second half.",
@@ -70,9 +70,18 @@
   "SETTINGS.BLOCKS.EXAMPLE": "Example: Blocks per condition = 2 means 2 x 4 people trials and 2 x 4 object trials.",
   "SETTINGS.EXPERIMENT.CONFIG": "Experiment Configuration",
   "SETTINGS.SKIP.SCREEN.CALIBRATION": "Skip the screen calibration steps",
+  "SETTINGS.SKIP.DEVICE": "Skip the step for connecting an external device (e.g. EEG trigger)",
   "SETTINGS.FORCE.DEVICE": "Force the usage of an external device with the experiment",
   "SETTINGS.SEQUENCING": "Set the experimental condition that should be shown first",
   "SETTINGS.PHOTODIODE_LABEL": "Will you use a photodiode?",
   "SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION": "Set a fixed size for numerosity image (end with px or %)",
-  "SETTINGS.HARD.IMAGE.SIZE.FIELD": "Fixed Image Size"
+  "SETTINGS.HARD.IMAGE.SIZE.FIELD": "Fixed Image Size",
+  "SETTINGS.CONFIDENCE.QUESTION": "Add a confidence question after each trial",
+  "SETTINGS.CONTINUE_BUTTON_DELAY": "Delay before enabling continue button (in seconds)",
+  "SETTINGS.NEXT_STEP.LABEL_NEXT_STEP": "Add a custom end page",
+  "SETTINGS.NEXT_STEP.LINK_PAGE_LABEL": "Custom End Page Settings",
+  "SETTINGS.NEXT_STEP.TITLE_LABEL": "Title",
+  "SETTINGS.NEXT_STEP.DESCRIPTION": "Main text on the end page",
+  "SETTINGS.NEXT_STEP.LINK_LABEL": "Optional: link to next task",
+  "SETTINGS.NEXT_STEP.LINK_TEXT_LABEL": "Text of the link"
 }

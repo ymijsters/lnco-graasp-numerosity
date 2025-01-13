@@ -21,9 +21,11 @@ import {
   ConfigurationSettings,
   DurationSettings,
   LanguageSettings,
+  NextStepSettings,
   SequencingSettings,
 } from '../config/appSettings';
 import { useSettings } from '../context/SettingsContext';
+import NextStepSettingsView from './NextStepSettings';
 
 const SettingsView: FC = () => {
   const { t } = useTranslation();
@@ -32,6 +34,7 @@ const SettingsView: FC = () => {
     sequencing: sequencingSavedState,
     duration: durationSavedState,
     language: languageSavedState,
+    nextStepSettings: nextStepSettingsSavedState,
     saveSettings,
   } = useSettings();
 
@@ -44,17 +47,20 @@ const SettingsView: FC = () => {
     useState<DurationSettings>(durationSavedState);
   const [language, setLangauge] =
     useState<LanguageSettings>(languageSavedState);
+  const [nextStepSettings, setNextStepSettings] = useState<NextStepSettings>(
+    nextStepSettingsSavedState,
+  );
 
   const saveAllSettings = (): void => {
     saveSettings('configuration', configuration);
     saveSettings('sequencing', sequencing);
     saveSettings('duration', duration);
     saveSettings('language', language);
+    saveSettings('nextStepSettings', nextStepSettings);
   };
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log({ configuration, sequencing, duration });
     setDuration(durationSavedState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [durationSavedState]);
@@ -64,7 +70,8 @@ const SettingsView: FC = () => {
       isEqual(configurationSavedState, configuration) &&
       isEqual(sequencingSavedState, sequencing) &&
       isEqual(durationSavedState, duration) &&
-      isEqual(languageSavedState, language)
+      isEqual(languageSavedState, language) &&
+      isEqual(nextStepSettingsSavedState, nextStepSettings)
     ) {
       return true;
     }
@@ -78,6 +85,8 @@ const SettingsView: FC = () => {
     durationSavedState,
     language,
     languageSavedState,
+    nextStepSettings,
+    nextStepSettingsSavedState,
   ]);
 
   const errorHardImageSize =
@@ -104,11 +113,41 @@ const SettingsView: FC = () => {
         />
         <FormControlLabel
           control={<Switch />}
+          label={t('SETTINGS.SKIP.DEVICE')}
+          onChange={(e, checked) => {
+            setConfiguration({ ...configuration, skipDevice: checked });
+          }}
+          checked={configuration.skipDevice}
+        />
+        <FormControlLabel
+          control={<Switch />}
           label={t('SETTINGS.FORCE.DEVICE')}
           onChange={(e, checked) => {
             setConfiguration({ ...configuration, forceDevice: checked });
           }}
           checked={configuration.forceDevice}
+        />
+        <TextField
+          value={configuration.continueButtonDelay}
+          label={t('SETTINGS.CONTINUE_BUTTON_DELAY')}
+          type="number"
+          onChange={(e) =>
+            setConfiguration({
+              ...configuration,
+              continueButtonDelay: Number(e.target.value),
+            })
+          }
+        />
+        <FormControlLabel
+          control={<Switch />}
+          label={t('SETTINGS.CONFIDENCE.QUESTION')}
+          onChange={(e, checked) => {
+            setConfiguration({
+              ...configuration,
+              addConfidenceQuestion: checked,
+            });
+          }}
+          checked={configuration.addConfidenceQuestion}
         />
         <Typography variant="h6">
           {t('SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION')}
@@ -153,6 +192,41 @@ const SettingsView: FC = () => {
               label="top-right"
             />
             <FormControlLabel value="off" control={<Radio />} label="off" />
+          </RadioGroup>
+        </Stack>
+        <Stack spacing={0}>
+          <Typography variant="h6">
+            Set the font size of the experiment
+          </Typography>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="random"
+            name="radio-buttons-group"
+            row
+            value={configuration.fontSize}
+            onChange={(e) =>
+              setConfiguration({
+                ...configuration,
+                fontSize: e.target.value as
+                  | 'small'
+                  | 'normal'
+                  | 'large'
+                  | 'extra-large',
+              })
+            }
+          >
+            <FormControlLabel value="small" control={<Radio />} label="Small" />
+            <FormControlLabel
+              value="normal"
+              control={<Radio />}
+              label="Normal"
+            />
+            <FormControlLabel value="large" control={<Radio />} label="Large" />
+            <FormControlLabel
+              value="extra-large"
+              control={<Radio />}
+              label="Extra Large"
+            />
           </RadioGroup>
         </Stack>
       </Stack>
@@ -213,6 +287,12 @@ const SettingsView: FC = () => {
           <FormControlLabel value="fr" control={<Radio />} label="French" />
         </RadioGroup>
       </Stack>
+      <NextStepSettingsView
+        nextStepSettings={nextStepSettings}
+        onChange={(newSetting: NextStepSettings) =>
+          setNextStepSettings(newSetting)
+        }
+      />
       <Box>
         <Button
           variant="contained"

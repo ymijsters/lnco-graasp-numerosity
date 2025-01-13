@@ -10,6 +10,10 @@
 import jsPsychHtmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import PreloadPlugin from '@jspsych/plugin-preload';
 import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import surveyLikert from '@jspsych/plugin-survey-likert';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Marked, Renderer } from '@ts-stack/markdown';
 import i18next from 'i18next';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
@@ -40,6 +44,17 @@ export type DeviceType = {
   ) => Promise<void>;
 };
 export type ConnectType = 'Serial Port' | 'USB' | null;
+
+Marked.setOptions({
+  renderer: new Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false,
+});
 
 /**
  * @function generateTimelineVars
@@ -72,6 +87,79 @@ function generateTimelineVars(
   return timelineVariables;
 }
 
+// Function to create the re-enter fullscreen button
+const addFullscreenButton = (): void => {
+  // Select the progress bar container
+  const progressBarContainer = document.getElementById(
+    'jspsych-progressbar-container',
+  );
+
+  if (progressBarContainer) {
+    // Create a button element
+    const fullscreenButton = document.createElement('button');
+    fullscreenButton.textContent = 'Fullscreen';
+    fullscreenButton.className = 'fullscreen-btn';
+    fullscreenButton.style.marginLeft = '10px'; // Style it as needed
+    fullscreenButton.style.cursor = 'pointer';
+
+    // Add an event listener to the button
+    fullscreenButton.addEventListener('click', () => {
+      const docEl = document.documentElement as HTMLElement & {
+        mozRequestFullScreen?: () => Promise<void>;
+        webkitRequestFullscreen?: () => Promise<void>;
+        msRequestFullscreen?: () => Promise<void>;
+      };
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen();
+      } else if (docEl.mozRequestFullScreen) {
+        // Firefox
+        docEl.mozRequestFullScreen();
+      } else if (docEl.webkitRequestFullscreen) {
+        // Chrome, Safari, and Opera
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.msRequestFullscreen) {
+        // IE/Edge
+        docEl.msRequestFullscreen();
+      }
+    });
+
+    // Append the button to the progress bar container
+    progressBarContainer.appendChild(fullscreenButton);
+  }
+};
+
+const addFontSizeMenu = (
+  fontSize: 'small' | 'normal' | 'large' | 'extra-large',
+): void => {
+  // Add dropdown when the trial starts
+  const progressBar = document.getElementById('jspsych-progressbar-container');
+  if (progressBar && !document.querySelector('.custom-dropdown')) {
+    // Create dropdown element
+    const dropdown = document.createElement('select');
+    dropdown.className = 'custom-dropdown';
+    dropdown.innerHTML = `
+        <option value="small" ${fontSize === 'small' ? 'selected' : ''}>Small</option>
+        <option value="normal" ${fontSize === 'normal' ? 'selected' : ''}>Normal</option>
+        <option value="large" ${fontSize === 'large' ? 'selected' : ''}>Large</option>
+        <option value="extra-large" ${fontSize === 'extra-large' ? 'selected' : ''}>Extra Large</option>
+      `;
+    const fontSizeTitle = document.createElement('span');
+    fontSizeTitle.innerHTML = 'Font Size:';
+    fontSizeTitle.style.marginLeft = '10px'; // Add some spacing
+    progressBar.appendChild(fontSizeTitle);
+    progressBar.appendChild(dropdown);
+
+    // Handle dropdown change
+    dropdown.addEventListener('change', (event) => {
+      const { target } = event;
+      const jspsychDisplayElement = document.getElementById('jspsych-content');
+      if (jspsychDisplayElement && target instanceof HTMLSelectElement) {
+        jspsychDisplayElement.setAttribute('data-font-size', target.value);
+      }
+    });
+  }
+};
+
 /**
  * @function partofexp
  * @description Creates a Timeline for one half of the numerosity task experiment. Each half consists of a series of blocks where images representing different numerosities (5, 6, 7, 8) are displayed in a random order. This ensures that no identical images are shown within the same experiment.
@@ -96,6 +184,7 @@ const partofexp: (
   cntable: 'people' | 'objects',
   nbBlocks: number,
   usePhotoDiode: 'top-left' | 'top-right' | 'off',
+  confidenceQuestion: boolean,
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -108,6 +197,7 @@ const partofexp: (
   cntable: 'people' | 'objects',
   nbBlocks: number,
   usePhotoDiode: 'top-left' | 'top-right' | 'off',
+  confidenceQuestion: boolean,
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -180,7 +270,7 @@ const partofexp: (
     // Survey to ask how many countables (people/objects) were estimated.
     {
       type: jsPsychSurveyHtmlForm,
-      preamble: `${i18next.t('inputPreable', { cntable: langf.translateCountable(cntable) })}`,
+      preamble: `<p>${i18next.t('inputPreable', { cntable: langf.translateCountable(cntable) })}</p>`,
       html: `<input type="number" label="numerosity input" name="num-input" id="task-input" required min="0" step="1" placeholder="${i18next.t('inputPlaceholder')}"><br>`,
       autofocus: 'task-input',
       buttonLabel: i18next.t('estimateSubmitBtn'),
@@ -209,6 +299,29 @@ const partofexp: (
           Math.round(
             (jsPsych.progressBar!.progress + 1 / (8 * nbBlocks)) * 1000000,
           ) / 1000000;
+      },
+    },
+    {
+      timeline: [
+        {
+          type: surveyLikert,
+          questions: [
+            {
+              prompt: 'How confidence are you about your response?',
+              required: true,
+              labels: [
+                '1 - Not Confidenct',
+                '2',
+                '3',
+                '4',
+                '5 - Very Confident',
+              ],
+            },
+          ],
+        },
+      ],
+      conditional_function() {
+        return confidenceQuestion;
       },
     },
   ],
@@ -253,6 +366,21 @@ const partofexp: (
       return newTimelines;
     },
   },
+});
+
+/**
+ *
+ * @returns Returns a simple welcome screen that automatically triggers fullscreen when the start button is pressed
+ */
+const getEndPage = (
+  title: string,
+  description: string,
+  link: string,
+  linkText: string,
+): Timeline => ({
+  type: jsPsychHtmlKeyboardResponse,
+  choices: 'NO_KEYS',
+  stimulus: `<div class='sd-html'><h5>${title}</h5><p>${Marked.parse(description)}</p><a class='link-to-experiment' target="_parent" href=${link}>${linkText}</a></div>`,
 });
 
 /**
@@ -325,6 +453,16 @@ export async function run({
       expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
   }
 
+  if (input.configuration.fontSize) {
+    const jspsychDisplayElement = document.getElementById('jspsych-content');
+    if (jspsychDisplayElement) {
+      jspsychDisplayElement.setAttribute(
+        'data-font-size',
+        input.configuration.fontSize,
+      );
+    }
+  }
+
   // Initiate Timeline
   const timeline: Timeline = [];
 
@@ -333,13 +471,17 @@ export async function run({
   timeline.push({
     type: PreloadPlugin,
     images: generatePreloadStrings(),
+    on_load() {
+      addFontSizeMenu(input.configuration.fontSize);
+      addFullscreenButton();
+    },
   });
 
   // Add FullScreen Plugin
   timeline.push(fullScreenPlugin(jsPsych));
 
   // 2. Add Device Connect pages
-  if (connectType) {
+  if (connectType && !input.configuration.skipDevice) {
     timeline.push(
       deviceConnectPages(
         jsPsych,
@@ -359,7 +501,11 @@ export async function run({
   }
 
   timeline.push(
-    groupInstructions(jsPsych, expPartsCountables[0]),
+    groupInstructions(
+      jsPsych,
+      expPartsCountables[0],
+      input.configuration.continueButtonDelay,
+    ),
     tipScreen(),
     createButtonPage(
       i18next.t('experimentStart'),
@@ -370,10 +516,15 @@ export async function run({
       expPartsCountables[0],
       blocksPerHalf,
       input.configuration.usePhotoDiode,
+      input.configuration.addConfidenceQuestion,
       deviceInfo,
     ),
     createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
-    groupInstructions(jsPsych, expPartsCountables[1]),
+    groupInstructions(
+      jsPsych,
+      expPartsCountables[1],
+      input.configuration.continueButtonDelay,
+    ),
     tipScreen(),
     createButtonPage(
       i18next.t('experimentStart'),
@@ -384,9 +535,24 @@ export async function run({
       expPartsCountables[1],
       blocksPerHalf,
       input.configuration.usePhotoDiode,
+      input.configuration.addConfidenceQuestion,
       deviceInfo,
     ),
   );
+
+  if (input.nextStepSettings.linkToNextPage) {
+    timeline.push({
+      ...getEndPage(
+        input.nextStepSettings.title,
+        input.nextStepSettings.description,
+        input.nextStepSettings.link,
+        input.nextStepSettings.linkText,
+      ),
+      on_load() {
+        onFinish(jsPsych.data.get(), input);
+      },
+    });
+  }
 
   await jsPsych.run(timeline);
 
@@ -396,7 +562,7 @@ export async function run({
 
   if (jsPsych.data.get().last(2).values()[0].trialType === 'quit-survey') {
     showEndScreen(i18next.t('abortedMessage'));
-  } else {
+  } else if (!input.nextStepSettings.linkToNextPage) {
     showEndScreen(i18next.t('endMessage'));
   }
 

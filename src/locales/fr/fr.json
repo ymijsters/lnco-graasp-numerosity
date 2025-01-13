@@ -25,7 +25,7 @@
   "instructionTexts": [
     "<b>Etape 1:<br>Une croix va s’afficher au centre de l’écran. Fixez-la bien des yeux.</b>",
     "<b>Etape 2:<br>Immédiatement après, une image présentant plusieurs {{cntable}} dans une pièce va s'afficher très rapidement au centre de l'écran.</b>",
-    "<p><b>Etape 3:<br>Ensuite, l'image disparaîtra très rapidement, et vous devrez estimer le nombre de {{cntable}} qui étaient affichées sur l'écran.</b><br><br><u>NOTE:</u> Il est normal de ne pas pouvoir compter le nombre de personnes car les images vont très vite, Donnez seulement une estimation.<p>",
+    "<b>Etape 3:<br>Ensuite, l'image disparaîtra très rapidement, et vous devrez estimer le nombre de {{cntable}} qui étaient affichées sur l'écran.</b><br><br><u>NOTE:</u> Il est normal de ne pas pouvoir compter le nombre de personnes car les images vont très vite, Donnez seulement une estimation.",
     "<b>Ces trois étapes vont se répéter plusieurs fois pendant l'expérience.</b>",
     "<b>RAPPEL: Il est normal de ne pas pouvoir compter le nombre de {{cntable}} car les images vont très vite. C'est intentionnel.<br><br>Donnez seulment une estimation.</b>"
   ],
