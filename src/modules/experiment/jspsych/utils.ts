@@ -40,7 +40,7 @@ export function createButtonPage(
 ): ButtonTrial {
   return {
     type: HtmlButtonResponsePlugin,
-    stimulus: `<b>${pageText}</b><br><br>`,
+    stimulus: `<h3><b>${pageText}</b></h3><br><br>`,
     choices: [btnText],
     on_finish: () => {
       const jsPsychContent = document.querySelector('.jspsych-content');

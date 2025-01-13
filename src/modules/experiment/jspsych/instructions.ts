@@ -165,7 +165,7 @@ const instructionQuiz: (
     {
       type: jsPsychSurveyMultiChoice,
       questions: langf.quizQuestions(cntable),
-      preamble: `<b>${i18next.t('quizPreamble')}</b><br><br><button id="quiz-repeat-btn" class="jspsych-btn">${i18next.t('repeatInstructions')}</button>`,
+      preamble: `<h3>${i18next.t('quizPreamble')}</h3><br><br><button id="quiz-repeat-btn" class="jspsych-btn">${i18next.t('repeatInstructions')}</button>`,
       button_label: i18next.t('estimateSubmitBtn'),
     },
   ],
