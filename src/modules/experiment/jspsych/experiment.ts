@@ -87,6 +87,79 @@ function generateTimelineVars(
   return timelineVariables;
 }
 
+// Function to create the re-enter fullscreen button
+const addFullscreenButton = (): void => {
+  // Select the progress bar container
+  const progressBarContainer = document.getElementById(
+    'jspsych-progressbar-container',
+  );
+
+  if (progressBarContainer) {
+    // Create a button element
+    const fullscreenButton = document.createElement('button');
+    fullscreenButton.textContent = 'Fullscreen';
+    fullscreenButton.className = 'fullscreen-btn';
+    fullscreenButton.style.marginLeft = '10px'; // Style it as needed
+    fullscreenButton.style.cursor = 'pointer';
+
+    // Add an event listener to the button
+    fullscreenButton.addEventListener('click', () => {
+      const docEl = document.documentElement as HTMLElement & {
+        mozRequestFullScreen?: () => Promise<void>;
+        webkitRequestFullscreen?: () => Promise<void>;
+        msRequestFullscreen?: () => Promise<void>;
+      };
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen();
+      } else if (docEl.mozRequestFullScreen) {
+        // Firefox
+        docEl.mozRequestFullScreen();
+      } else if (docEl.webkitRequestFullscreen) {
+        // Chrome, Safari, and Opera
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.msRequestFullscreen) {
+        // IE/Edge
+        docEl.msRequestFullscreen();
+      }
+    });
+
+    // Append the button to the progress bar container
+    progressBarContainer.appendChild(fullscreenButton);
+  }
+};
+
+const addFontSizeMenu = (
+  fontSize: 'small' | 'normal' | 'large' | 'extra-large',
+): void => {
+  // Add dropdown when the trial starts
+  const progressBar = document.getElementById('jspsych-progressbar-container');
+  if (progressBar && !document.querySelector('.custom-dropdown')) {
+    // Create dropdown element
+    const dropdown = document.createElement('select');
+    dropdown.className = 'custom-dropdown';
+    dropdown.innerHTML = `
+        <option value="small" ${fontSize === 'small' ? 'selected' : ''}>Small</option>
+        <option value="normal" ${fontSize === 'normal' ? 'selected' : ''}>Normal</option>
+        <option value="large" ${fontSize === 'large' ? 'selected' : ''}>Large</option>
+        <option value="extra-large" ${fontSize === 'extra-large' ? 'selected' : ''}>Extra Large</option>
+      `;
+    const fontSizeTitle = document.createElement('span');
+    fontSizeTitle.innerHTML = 'Font Size:';
+    fontSizeTitle.style.marginLeft = '10px'; // Add some spacing
+    progressBar.appendChild(fontSizeTitle);
+    progressBar.appendChild(dropdown);
+
+    // Handle dropdown change
+    dropdown.addEventListener('change', (event) => {
+      const { target } = event;
+      const jspsychDisplayElement = document.getElementById('jspsych-content');
+      if (jspsychDisplayElement && target instanceof HTMLSelectElement) {
+        jspsychDisplayElement.setAttribute('data-font-size', target.value);
+      }
+    });
+  }
+};
+
 /**
  * @function partofexp
  * @description Creates a Timeline for one half of the numerosity task experiment. Each half consists of a series of blocks where images representing different numerosities (5, 6, 7, 8) are displayed in a random order. This ensures that no identical images are shown within the same experiment.
@@ -197,7 +270,7 @@ const partofexp: (
     // Survey to ask how many countables (people/objects) were estimated.
     {
       type: jsPsychSurveyHtmlForm,
-      preamble: `${i18next.t('inputPreable', { cntable: langf.translateCountable(cntable) })}`,
+      preamble: `<p>${i18next.t('inputPreable', { cntable: langf.translateCountable(cntable) })}</p>`,
       html: `<input type="number" label="numerosity input" name="num-input" id="task-input" required min="0" step="1" placeholder="${i18next.t('inputPlaceholder')}"><br>`,
       autofocus: 'task-input',
       buttonLabel: i18next.t('estimateSubmitBtn'),
@@ -380,6 +453,16 @@ export async function run({
       expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
   }
 
+  if (input.configuration.fontSize) {
+    const jspsychDisplayElement = document.getElementById('jspsych-content');
+    if (jspsychDisplayElement) {
+      jspsychDisplayElement.setAttribute(
+        'data-font-size',
+        input.configuration.fontSize,
+      );
+    }
+  }
+
   // Initiate Timeline
   const timeline: Timeline = [];
 
@@ -388,6 +471,10 @@ export async function run({
   timeline.push({
     type: PreloadPlugin,
     images: generatePreloadStrings(),
+    on_load() {
+      addFontSizeMenu(input.configuration.fontSize);
+      addFullscreenButton();
+    },
   });
 
   // Add FullScreen Plugin

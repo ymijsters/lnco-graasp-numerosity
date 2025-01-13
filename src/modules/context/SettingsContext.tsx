@@ -31,6 +31,7 @@ const defaultSettingsValues: AllSettingsType = {
     usePhotoDiode: 'off',
     addConfidenceQuestion: false,
     continueButtonDelay: 0,
+    fontSize: 'normal',
   },
   duration: {
     content: 4,

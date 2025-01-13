@@ -1,21 +1,57 @@
 //@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 //@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
-h3 {
-  font-size: 1.5rem;
-  line-height: 1.8rem;
+/* Base font sizes for different classes */
+[data-font-size='small'] {
+  --font-scale: 0.6;
 }
-h2 {
-  font-size: 45px;
+
+[data-font-size='normal'] {
+  --font-scale: 1;
 }
-h1 {
-  font-size: 50px;
+
+[data-font-size='large'] {
+  --font-scale: 1.2;
+}
+
+[data-font-size='extra-large'] {
+  --font-scale: 1.5;
+}
+
+/* Apply font-size scaling to elements */
+[data-font-size] h1 {
+  font-size: calc(var(--font-scale) * 2.5rem);
+  line-height: calc(var(--font-scale) * 2.7em);
+}
+
+[data-font-size] h2 {
+  font-size: calc(var(--font-scale) * 2rem);
+  line-height: calc(var(--font-scale) * 2.2em);
+}
+
+[data-font-size] h3 {
+  font-size: calc(var(--font-scale) * 1.8rem);
+  line-height: calc(var(--font-scale) * 2em);
+}
+
+[data-font-size] p {
+  font-size: calc(var(--font-scale) * 1.5rem);
+  line-height: calc(var(--font-scale) * 1.8rem);
+}
+
+[data-font-size] label {
+  font-size: calc(var(--font-scale) * 1.5rem);
+  line-height: calc(var(--font-scale) * 2.2rem);
+}
+
+[data-font-size] span {
+  font-size: calc(var(--font-scale) * 0.9rem);
+  line-height: calc(var(--font-scale) * 1rem);
 }
 
 .jspsych-content-outer {
   text-align: center;
   margin: 0 auto; /* this is for overflowing content */
-  font-size: 1.25rem;
   width: 100%;
   height: 100%;
   background-color: rgb(49, 49, 49);
@@ -32,7 +68,6 @@ h1 {
   flex-direction: column;
   overflow-y: auto;
   font-family: 'Nunito', 'Roboto', 'sans-serif';
-  font-size: 1.5rem;
   line-height: 1.6em;
 }
 
@@ -101,10 +136,6 @@ h1 {
   height: 100%;
 }
 
-.jspsych-display-element input[type='text'] {
-  font-size: 38px;
-}
-
 .jspsych-btn-group-grid {
   margin: 10px;
 }
@@ -120,7 +151,7 @@ h1 {
   font-weight: 400;
   font-family: 'Nunito', 'Roboto', 'sans-serif';
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: calc(var(--font-scale) * 1rem);
   cursor: pointer;
   line-height: 1.4;
   text-align: center;
@@ -151,6 +182,34 @@ h1 {
 
 .quit-btn {
   right: 70px;
+  position: absolute;
+  top: 50%;
+  color: rgb(100, 100, 100);
+  position: absolute;
+  background-color: #fff;
+  transform: translateY(-50%);
+  display: inline-block;
+  padding: 1px 6px;
+  margin: 0px;
+  font-family: 'Nunito', 'Roboto', 'sans-serif';
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+}
+
+.fullscreen-btn {
+  left: 55px;
   position: absolute;
   top: 50%;
   color: rgb(100, 100, 100);
@@ -274,7 +333,7 @@ button:hover {
 }
 
 .inst-monitor {
-  width: 33%;
+  width: 50%;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -302,14 +361,20 @@ button:hover {
   font-size: 0.7rem;
   line-height: 0.9rem;
   display: flex;
-}
-
-.input-content {
-  margin: auto;
+  position: absolute;
+  top: 46%; /* Move the content to 40% of the container height */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for accurate centering */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .input-content p {
   margin: 0 0 10px 0;
+  font-size: 0.7rem;
+  line-height: 0.9rem;
 }
 
 /* Instruction page 4 - 3 monitors in a row */
@@ -323,7 +388,7 @@ button:hover {
 }
 
 .group-monitors .inst-monitor {
-  max-width: 100%;
+  width: 33%;
   height: auto;
 }
 
@@ -361,8 +426,10 @@ button:hover {
 }
 
 #task-input {
-  font-size: larger;
   margin: 5%;
+  padding: 0 1%;
+  font-size: calc(var(--font-scale) * 1.5rem);
+  line-height: calc(var(--font-scale) * 1.5em);
 }
 
 .jspsych-instructions-nav {

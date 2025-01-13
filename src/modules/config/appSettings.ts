@@ -14,6 +14,7 @@ export type ConfigurationSettings = {
   usePhotoDiode: 'top-left' | 'top-right' | 'off';
   addConfidenceQuestion: boolean;
   continueButtonDelay: number;
+  fontSize: 'small' | 'normal' | 'large' | 'extra-large';
 };
 export enum AllowedLanguages {
   English = 'en',
