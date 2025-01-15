@@ -62,5 +62,6 @@
   "quitSurveyBtnClose": "Fermer",
   "quitSurveyBtnEnd": "Arrêter l'expérience",
   "abortedMessage": "Expérience arrêtée !<br><br>Vous avez interrompu l'expérience prématurément.",
-  "endMessage": "Merci!<br><br>Vous êtes arrivé.e à la fin de l'expérience!"
+  "endMessage": "Vous êtes arrivé.e à la fin de l'expérience! Merci!",
+  "endMessageDescription": "Veuillez informer l'expérimentateur"
 }

@@ -202,7 +202,7 @@ const returnPage: (
   timeline: [
     {
       type: HtmlButtonResponsePlugin,
-      stimulus: `<p><b>${i18next.t('repeatInstructions')}</b></p>`,
+      stimulus: `<h3><b>${i18next.t('repeatInstructions')}</b></h3>`,
       choices: [i18next.t('repeatInstructions')],
     },
   ],

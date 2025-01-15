@@ -17,6 +17,7 @@ import { Marked, Renderer } from '@ts-stack/markdown';
 import i18next from 'i18next';
 import { DataCollection, JsPsych, initJsPsych } from 'jspsych';
 
+import { ExperimentResult, StatusEnum } from '@/modules/config/appResults';
 import { AllSettingsType } from '@/modules/context/SettingsContext';
 
 import { groupInstructions, tipScreen } from './instructions';
@@ -152,7 +153,9 @@ const addFontSizeMenu = (
     // Handle dropdown change
     dropdown.addEventListener('change', (event) => {
       const { target } = event;
-      const jspsychDisplayElement = document.getElementById('jspsych-content');
+      const jspsychDisplayElement = document.getElementById(
+        'jspsych-display-element',
+      );
       if (jspsychDisplayElement && target instanceof HTMLSelectElement) {
         jspsychDisplayElement.setAttribute('data-font-size', target.value);
       }
@@ -185,6 +188,7 @@ const partofexp: (
   nbBlocks: number,
   usePhotoDiode: 'top-left' | 'top-right' | 'off',
   confidenceQuestion: boolean,
+  secondBlock: boolean | undefined,
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -192,12 +196,14 @@ const partofexp: (
       trigger: string,
     ) => Promise<void>;
   },
+  blockCompleted: () => void,
 ) => Timeline = (
   jsPsych: JsPsych,
   cntable: 'people' | 'objects',
   nbBlocks: number,
   usePhotoDiode: 'top-left' | 'top-right' | 'off',
   confidenceQuestion: boolean,
+  secondBlock: boolean | undefined,
   deviceInfo: {
     device: SerialPort | USBDevice | null;
     sendTriggerFunction: (
@@ -205,6 +211,7 @@ const partofexp: (
       trigger: string,
     ) => Promise<void>;
   },
+  blockCompleted: () => void,
 ): Timeline => ({
   timeline: [
     // Blackscreen before stimuli
@@ -294,10 +301,13 @@ const partofexp: (
         deviceInfo.sendTriggerFunction(deviceInfo.device, '4');
       },
       on_finish(): void {
+        const progressBarTotal = secondBlock ? 8 : 4;
         // eslint-disable-next-line no-param-reassign
         jsPsych.progressBar!.progress =
           Math.round(
-            (jsPsych.progressBar!.progress + 1 / (8 * nbBlocks)) * 1000000,
+            (jsPsych.progressBar!.progress +
+              1 / (progressBarTotal * nbBlocks)) *
+              1000000,
           ) / 1000000;
       },
     },
@@ -366,6 +376,9 @@ const partofexp: (
       return newTimelines;
     },
   },
+  on_timeline_finish() {
+    blockCompleted();
+  },
 });
 
 /**
@@ -380,7 +393,7 @@ const getEndPage = (
 ): Timeline => ({
   type: jsPsychHtmlKeyboardResponse,
   choices: 'NO_KEYS',
-  stimulus: `<div class='sd-html'><h5>${title}</h5><p>${Marked.parse(description)}</p><a class='link-to-experiment' target="_parent" href=${link}>${linkText}</a></div>`,
+  stimulus: `<div class='sd-html'><h3>${title}</h3><p>${Marked.parse(description)}</p><a class='link-to-experiment' target="_parent" href=${link}>${linkText}</a></div>`,
 });
 
 /**
@@ -398,26 +411,29 @@ export async function run({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   assetPaths,
   input,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  environment,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  title,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  version,
   onFinish,
 }: {
   assetPaths: { images: string[]; audio: string[]; video: string[] };
-  input: AllSettingsType;
-  environment: string;
-  title: string;
-  version: string;
-  onFinish: (data: DataCollection, settings: AllSettingsType) => void;
+  input: { settings: AllSettingsType; results: ExperimentResult };
+  onFinish: (
+    data: DataCollection,
+    settings: AllSettingsType,
+    status: StatusEnum,
+  ) => void;
 }): Promise<JsPsych> {
   // Parameters:
-  const blocksPerHalf: number = input.duration.content || 5;
+  const {
+    configuration,
+    duration,
+    sequencing,
+    language,
+    photoDiodeSettings,
+    nextStepSettings,
+  } = input.settings;
+  const blocksPerHalf: number = duration.content || 5;
   const connectType: 'Serial Port' | 'USB' | null = 'Serial Port';
 
-  i18next.changeLanguage(input.language.language);
+  i18next.changeLanguage(language.language);
 
   // Pseudo state variable
   const deviceInfo: DeviceType = {
@@ -433,32 +449,38 @@ export async function run({
     show_progress_bar: true,
     auto_update_progress_bar: false,
     message_progress_bar: i18next.t('progressBar'),
-    display_element: 'jspsych-content',
+    display_element: 'jspsych-display-element',
     on_finish: (): void => {
-      onFinish(jsPsych.data.get(), input);
+      onFinish(jsPsych.data.get(), input.settings, StatusEnum.Done);
     },
   });
 
   // Set sequencing based on the sequencing config
   let expPartsCountables: ('people' | 'objects')[] = ['people', 'objects'];
-  switch (input.sequencing.content) {
-    case 'people':
-      expPartsCountables = ['people', 'objects'];
-      break;
-    case 'objects':
-      expPartsCountables = ['objects', 'people'];
-      break;
-    case 'random':
-    default:
-      expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
+  if (sequencing.customize) {
+    switch (sequencing.firstBlock) {
+      case 'persons':
+        expPartsCountables = ['people', 'objects'];
+        break;
+      case 'objects':
+        expPartsCountables = ['objects', 'people'];
+        break;
+      case 'random':
+      default:
+        expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
+    }
+  } else {
+    expPartsCountables = jsPsych.randomization.shuffle(expPartsCountables);
   }
 
-  if (input.configuration.fontSize) {
-    const jspsychDisplayElement = document.getElementById('jspsych-content');
+  if (configuration.fontSize) {
+    const jspsychDisplayElement = document.getElementById(
+      'jspsych-display-element',
+    );
     if (jspsychDisplayElement) {
       jspsychDisplayElement.setAttribute(
         'data-font-size',
-        input.configuration.fontSize,
+        configuration.fontSize,
       );
     }
   }
@@ -472,7 +494,7 @@ export async function run({
     type: PreloadPlugin,
     images: generatePreloadStrings(),
     on_load() {
-      addFontSizeMenu(input.configuration.fontSize);
+      addFontSizeMenu(configuration.fontSize);
       addFullscreenButton();
     },
   });
@@ -481,32 +503,60 @@ export async function run({
   timeline.push(fullScreenPlugin(jsPsych));
 
   // 2. Add Device Connect pages
-  if (connectType && !input.configuration.skipDevice) {
+  if (connectType && !configuration.skipDevice) {
     timeline.push(
       deviceConnectPages(
         jsPsych,
         deviceInfo,
         connectType,
-        input.configuration.forceDevice,
+        configuration.forceDevice,
       ),
     );
   }
 
-  if (input.configuration.hardImageSize) {
-    setHardCodedSizes(input.configuration.hardImageSize);
-  } else if (input.configuration.skipCalibration) {
+  if (photoDiodeSettings.usePhotoDiode !== 'off') {
+    const photoDiodeElement = document.createElement('div');
+    photoDiodeElement.id = 'photo-diode-element';
+    photoDiodeElement.className = `photo-diode photo-diode-black ${photoDiodeSettings.usePhotoDiode} ${photoDiodeSettings.testPhotoDiode ? 'photo-diode-test' : ''}`;
+    document
+      .getElementById('jspsych-display-element')
+      ?.appendChild(photoDiodeElement);
+    if (photoDiodeSettings.usePhotoDiode === 'customize') {
+      const left = photoDiodeSettings.photoDiodeLeft;
+      const top = photoDiodeSettings.photoDiodeTop;
+      const width = photoDiodeSettings.photoDiodeWidth;
+      const height = photoDiodeSettings.photoDiodeHeight;
+      if (photoDiodeElement && left && top && width && height) {
+        photoDiodeElement.style.setProperty('--photodiode-left', left);
+        photoDiodeElement.style.setProperty('--photodiode-top', top);
+        photoDiodeElement.style.setProperty('--photodiode-width', width);
+        photoDiodeElement.style.setProperty('--photodiode-height', height);
+      }
+    }
+  }
+
+  if (configuration.hardImageSize) {
+    setHardCodedSizes(configuration.hardImageSize);
+  } else if (configuration.skipCalibration) {
     setSizes(1);
   } else {
     timeline.push(resize(jsPsych));
   }
 
+  if (!sequencing.customize || sequencing.instructionsFirst) {
+    timeline.push(
+      groupInstructions(
+        jsPsych,
+        expPartsCountables[0],
+        configuration.continueButtonDelay,
+      ),
+      tipScreen(),
+    );
+  }
+
+  const hasSecondBlock = sequencing.secondBlock || !sequencing.customize;
+
   timeline.push(
-    groupInstructions(
-      jsPsych,
-      expPartsCountables[0],
-      input.configuration.continueButtonDelay,
-    ),
-    tipScreen(),
     createButtonPage(
       i18next.t('experimentStart'),
       i18next.t('experimentStartBtn'),
@@ -515,41 +565,75 @@ export async function run({
       jsPsych,
       expPartsCountables[0],
       blocksPerHalf,
-      input.configuration.usePhotoDiode,
-      input.configuration.addConfidenceQuestion,
+      configuration.usePhotoDiode,
+      configuration.addConfidenceQuestion,
+      hasSecondBlock,
       deviceInfo,
-    ),
-    createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
-    groupInstructions(
-      jsPsych,
-      expPartsCountables[1],
-      input.configuration.continueButtonDelay,
-    ),
-    tipScreen(),
-    createButtonPage(
-      i18next.t('experimentStart'),
-      i18next.t('experimentStartBtn'),
-    ),
-    partofexp(
-      jsPsych,
-      expPartsCountables[1],
-      blocksPerHalf,
-      input.configuration.usePhotoDiode,
-      input.configuration.addConfidenceQuestion,
-      deviceInfo,
+      () => {
+        onFinish(
+          jsPsych.data.get(),
+          input.settings,
+          hasSecondBlock ? StatusEnum.Block2 : StatusEnum.Done,
+        );
+      },
     ),
   );
+  if (hasSecondBlock) {
+    timeline.push(
+      createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
+    );
+    if (sequencing.instructionsSecond) {
+      timeline.push(
+        groupInstructions(
+          jsPsych,
+          expPartsCountables[1],
+          configuration.continueButtonDelay,
+        ),
+        tipScreen(),
+      );
+    }
+    timeline.push(
+      createButtonPage(
+        i18next.t('experimentStart'),
+        i18next.t('experimentStartBtn'),
+      ),
+      partofexp(
+        jsPsych,
+        expPartsCountables[1],
+        blocksPerHalf,
+        configuration.usePhotoDiode,
+        configuration.addConfidenceQuestion,
+        hasSecondBlock,
+        deviceInfo,
+        () => {
+          onFinish(jsPsych.data.get(), input.settings, StatusEnum.Done);
+        },
+      ),
+    );
+  }
 
-  if (input.nextStepSettings.linkToNextPage) {
+  if (nextStepSettings.linkToNextPage) {
     timeline.push({
       ...getEndPage(
-        input.nextStepSettings.title,
-        input.nextStepSettings.description,
-        input.nextStepSettings.link,
-        input.nextStepSettings.linkText,
+        nextStepSettings.title,
+        nextStepSettings.description,
+        nextStepSettings.link,
+        nextStepSettings.linkText,
       ),
       on_load() {
-        onFinish(jsPsych.data.get(), input);
+        onFinish(jsPsych.data.get(), input.settings, StatusEnum.Done);
+      },
+    });
+  } else {
+    timeline.push({
+      ...getEndPage(
+        i18next.t('endMessage'),
+        i18next.t('endMessageDescription'),
+        '',
+        '',
+      ),
+      on_load() {
+        onFinish(jsPsych.data.get(), input.settings, StatusEnum.Done);
       },
     });
   }
@@ -562,7 +646,7 @@ export async function run({
 
   if (jsPsych.data.get().last(2).values()[0].trialType === 'quit-survey') {
     showEndScreen(i18next.t('abortedMessage'));
-  } else if (!input.nextStepSettings.linkToNextPage) {
+  } else if (!nextStepSettings.linkToNextPage) {
     showEndScreen(i18next.t('endMessage'));
   }
 

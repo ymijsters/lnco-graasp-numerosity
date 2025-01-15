@@ -276,8 +276,7 @@ button:hover {
 
 #resize-bar {
   height: 4px;
-  width: 10cm;
-  background-color: white;
+  width: 312px;
   border: 3px solid #3fa0ef;
 }
 
@@ -441,6 +440,7 @@ button:hover {
 .photo-diode {
   width: 50px;
   height: 50px;
+  z-index: 5;
 }
 
 .top-left {
@@ -455,6 +455,14 @@ button:hover {
   top: 0px;
 }
 
+.customize {
+  position: absolute;
+  left: var(--photodiode-left);
+  top: var(--photodiode-top);
+  width: var(--photodiode-width);
+  height: var(--photodiode-height);
+}
+
 .photo-diode-hide {
   display: none;
 }
@@ -465,4 +473,9 @@ button:hover {
 
 .photo-diode-white {
   background-color: #fff;
+  z-index: 5;
+}
+
+.photo-diode-test {
+  background-color: #ff0000;
 }

@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -13,6 +16,7 @@ import {
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 
+import { DataCollection } from 'jspsych';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { isEqual } from 'lodash';
 
@@ -22,10 +26,14 @@ import {
   DurationSettings,
   LanguageSettings,
   NextStepSettings,
+  PhotoDiodeSettings,
   SequencingSettings,
 } from '../config/appSettings';
 import { useSettings } from '../context/SettingsContext';
 import NextStepSettingsView from './NextStepSettings';
+import PhotoDiodeSettingsView from './PhotoDiodeSettingsView';
+import SequencingSettingsView from './SequencingSettingsView';
+import { run } from './SettingsCalibrationView';
 
 const SettingsView: FC = () => {
   const { t } = useTranslation();
@@ -34,6 +42,7 @@ const SettingsView: FC = () => {
     sequencing: sequencingSavedState,
     duration: durationSavedState,
     language: languageSavedState,
+    photoDiodeSettings: photoDiodeSettingsSavedState,
     nextStepSettings: nextStepSettingsSavedState,
     saveSettings,
   } = useSettings();
@@ -50,12 +59,18 @@ const SettingsView: FC = () => {
   const [nextStepSettings, setNextStepSettings] = useState<NextStepSettings>(
     nextStepSettingsSavedState,
   );
+  const [photoDiodeSettings, setPhotoDiodeSettings] =
+    useState<PhotoDiodeSettings>(photoDiodeSettingsSavedState);
+
+  // Track a modal for running a calibration
+  const [calibrationModalOpen, setCalibrationModalOpen] = useState(false);
 
   const saveAllSettings = (): void => {
     saveSettings('configuration', configuration);
     saveSettings('sequencing', sequencing);
     saveSettings('duration', duration);
     saveSettings('language', language);
+    saveSettings('photoDiodeSettings', photoDiodeSettings);
     saveSettings('nextStepSettings', nextStepSettings);
   };
 
@@ -71,6 +86,7 @@ const SettingsView: FC = () => {
       isEqual(sequencingSavedState, sequencing) &&
       isEqual(durationSavedState, duration) &&
       isEqual(languageSavedState, language) &&
+      isEqual(photoDiodeSettingsSavedState, photoDiodeSettings) &&
       isEqual(nextStepSettingsSavedState, nextStepSettings)
     ) {
       return true;
@@ -85,6 +101,8 @@ const SettingsView: FC = () => {
     durationSavedState,
     language,
     languageSavedState,
+    photoDiodeSettings,
+    photoDiodeSettingsSavedState,
     nextStepSettings,
     nextStepSettingsSavedState,
   ]);
@@ -95,6 +113,10 @@ const SettingsView: FC = () => {
       configuration.hardImageSize.endsWith('px') ||
       configuration.hardImageSize.endsWith('%')
     );
+
+  const handleCalibrate = (): void => {
+    setCalibrationModalOpen(true); // Open modal
+  };
 
   return (
     <Stack spacing={2}>
@@ -127,72 +149,37 @@ const SettingsView: FC = () => {
           }}
           checked={configuration.forceDevice}
         />
-        <TextField
-          value={configuration.continueButtonDelay}
-          label={t('SETTINGS.CONTINUE_BUTTON_DELAY')}
-          type="number"
-          onChange={(e) =>
-            setConfiguration({
-              ...configuration,
-              continueButtonDelay: Number(e.target.value),
-            })
-          }
-        />
-        <FormControlLabel
-          control={<Switch />}
-          label={t('SETTINGS.CONFIDENCE.QUESTION')}
-          onChange={(e, checked) => {
-            setConfiguration({
-              ...configuration,
-              addConfidenceQuestion: checked,
-            });
-          }}
-          checked={configuration.addConfidenceQuestion}
-        />
-        <Typography variant="h6">
-          {t('SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION')}
-        </Typography>
-        <TextField
-          value={configuration.hardImageSize}
-          label={t('SETTINGS.HARD.IMAGE.SIZE.FIELD')}
-          onChange={(e) =>
-            setConfiguration({
-              ...configuration,
-              hardImageSize: e.target.value,
-            })
-          }
-          error={errorHardImageSize}
-        />
         <Stack spacing={1}>
-          <Typography variant="h6">{t('SETTINGS.PHOTODIODE_LABEL')}</Typography>
-          <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="random"
-            name="radio-buttons-group"
-            row
-            value={configuration.usePhotoDiode}
+          <Typography variant="h6">
+            {t('SETTINGS.CONTINUE.BUTTON.DELAY.TITLE')}
+          </Typography>
+          <TextField
+            value={configuration.continueButtonDelay}
+            label={t('SETTINGS.CONTINUE_BUTTON_DELAY')}
+            type="number"
             onChange={(e) =>
               setConfiguration({
                 ...configuration,
-                usePhotoDiode: e.target.value as
-                  | 'top-left'
-                  | 'top-right'
-                  | 'off',
+                continueButtonDelay: Number(e.target.value),
               })
             }
-          >
-            <FormControlLabel
-              value="top-left"
-              control={<Radio />}
-              label="top-left"
-            />
-            <FormControlLabel
-              value="top-right"
-              control={<Radio />}
-              label="top-right"
-            />
-            <FormControlLabel value="off" control={<Radio />} label="off" />
-          </RadioGroup>
+          />
+        </Stack>
+        <Stack spacing={1}>
+          <Typography variant="h6">
+            {t('SETTINGS.CONFIDENCE.QUESTION.TITLE')}
+          </Typography>
+          <FormControlLabel
+            control={<Switch />}
+            label={t('SETTINGS.CONFIDENCE.QUESTION')}
+            onChange={(e, checked) => {
+              setConfiguration({
+                ...configuration,
+                addConfidenceQuestion: checked,
+              });
+            }}
+            checked={configuration.addConfidenceQuestion}
+          />
         </Stack>
         <Stack spacing={0}>
           <Typography variant="h6">
@@ -229,7 +216,32 @@ const SettingsView: FC = () => {
             />
           </RadioGroup>
         </Stack>
+        <Stack spacing={1}>
+          <Typography variant="h6">
+            {t('SETTINGS.HARD.IMAGE.SIZE.DESCRIPTION')}
+          </Typography>
+          <TextField
+            value={configuration.hardImageSize}
+            label={t('SETTINGS.HARD.IMAGE.SIZE.FIELD')}
+            onChange={(e) =>
+              setConfiguration({
+                ...configuration,
+                hardImageSize: e.target.value,
+              })
+            }
+            error={errorHardImageSize}
+          />
+          <Box>
+            <Button variant="contained" onClick={handleCalibrate}>
+              Calibrate
+            </Button>
+          </Box>
+        </Stack>
       </Stack>
+      <PhotoDiodeSettingsView
+        photoDiodeSettings={photoDiodeSettings}
+        onChange={setPhotoDiodeSettings}
+      />
       <Stack spacing={1}>
         <Typography variant="h6">{t('SETTINGS.BLOCKS.TITLE')}</Typography>
         <Stack spacing={0}>
@@ -245,29 +257,10 @@ const SettingsView: FC = () => {
           onChange={(e) => setDuration({ content: Number(e.target.value) })}
         />
       </Stack>
-      <Stack spacing={1}>
-        <Typography variant="h6">{t('SETTINGS.SEQUENCING')}</Typography>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="random"
-          name="radio-buttons-group"
-          row
-          value={sequencing.content}
-          onChange={(e) =>
-            setSequencing({
-              content: e.target.value as SequencingSettings['content'],
-            })
-          }
-        >
-          <FormControlLabel value="random" control={<Radio />} label="Random" />
-          <FormControlLabel
-            value="objects"
-            control={<Radio />}
-            label="Objects"
-          />
-          <FormControlLabel value="people" control={<Radio />} label="People" />
-        </RadioGroup>
-      </Stack>
+      <SequencingSettingsView
+        sequencingSettings={sequencing}
+        onChange={setSequencing}
+      />
       <Stack spacing={1}>
         <Typography variant="h6">Language</Typography>
         <RadioGroup
@@ -293,6 +286,42 @@ const SettingsView: FC = () => {
           setNextStepSettings(newSetting)
         }
       />
+
+      <Dialog
+        open={calibrationModalOpen}
+        onClose={() => setCalibrationModalOpen(false)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>Calibration Results</DialogTitle>
+        <DialogContent>
+          <Button
+            onClick={() => {
+              run({
+                input: {
+                  configuration,
+                  duration,
+                  language,
+                  nextStepSettings,
+                  photoDiodeSettings,
+                  sequencing,
+                },
+                onFinish: (data: DataCollection) => {
+                  setConfiguration({
+                    ...configuration,
+                    hardImageSize: `${(10 / data.values()[0].response.input) * 1116}px`,
+                  });
+                  setCalibrationModalOpen(false);
+                },
+              });
+            }}
+          >
+            Run Calibration
+          </Button>
+          <div id="calibration-div" />
+        </DialogContent>
+      </Dialog>
+
       <Box>
         <Button
           variant="contained"

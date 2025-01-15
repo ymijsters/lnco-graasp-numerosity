@@ -177,7 +177,7 @@ export function setSizes(
 ): void {
   const style: HTMLElement =
     document.getElementById('scaling') || document.createElement('style');
-  const widthPixels: number = scalingFactor * 585.82677165;
+  const widthPixels: number = scalingFactor * 1116;
   style.id = 'scaling';
   style.innerHTML = `.task-img, vid {
         width: ${widthPixels}px; 

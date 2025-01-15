@@ -61,5 +61,6 @@
   "quitSurveyBtnClose": "Schließen",
   "quitSurveyBtnEnd": "Experiment abbrechen",
   "abortedMessage": "Experiment abgebrochen!<br><br>Sie haben das Experiment frühzeitig abgebrochen.",
-  "endMessage": "Vielen Dank!<br><br>Sie haben das Experiment abgeschlossen!"
+  "endMessage": "Sie haben das Experiment abgeschlossen! Vielen Dank!",
+  "endMessageDescription": "Bitte teilen Sie dem Experimentator mit"
 }

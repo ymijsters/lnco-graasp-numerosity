@@ -77,7 +77,6 @@ const ResultsView: FC = () => {
             <TableRow>
               <TableCell>User</TableCell>
               <TableCell>Number of Blocks</TableCell>
-              <TableCell>Sequencing</TableCell>
               <TableCell>jsPsych Data Size</TableCell>
               <TableCell>Export</TableCell>
             </TableRow>
@@ -92,7 +91,6 @@ const ResultsView: FC = () => {
                   key={data.id}
                   name={data.creator?.name}
                   duration={data.data.settings?.duration.content}
-                  sequencing={data.data.settings?.sequencing.content}
                   length={rawData ? rawData.count() : 0}
                   rawDataDownload={() =>
                     downloadJson(

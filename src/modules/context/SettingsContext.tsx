@@ -8,6 +8,7 @@ import {
   DurationSettings,
   LanguageSettings,
   NextStepSettings,
+  PhotoDiodeSettings,
   SequencingSettings,
 } from '../config/appSettings';
 
@@ -18,6 +19,7 @@ export type AllSettingsType = {
   duration: DurationSettings;
   sequencing: SequencingSettings;
   language: LanguageSettings;
+  photoDiodeSettings: PhotoDiodeSettings;
   nextStepSettings: NextStepSettings;
 };
 
@@ -37,10 +39,13 @@ const defaultSettingsValues: AllSettingsType = {
     content: 4,
   },
   sequencing: {
-    content: 'random',
+    customize: false,
   },
   language: {
     language: AllowedLanguages.English,
+  },
+  photoDiodeSettings: {
+    usePhotoDiode: 'off',
   },
   nextStepSettings: {
     title: '',
@@ -57,6 +62,7 @@ const ALL_SETTING_NAMES = [
   'duration',
   'sequencing',
   'language',
+  'photoDiodeSettings',
   'nextStepSettings',
 ] as const;
 

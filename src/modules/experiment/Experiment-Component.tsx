@@ -1,18 +1,23 @@
-import { FC, useCallback, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+
+import { Stack, Typography } from '@mui/material';
 
 import { DataCollection, JsPsych } from 'jspsych';
 
-import { mutations } from '@/config/queryClient';
-
 import '../../styles/main.scss';
+import { StatusEnum } from '../config/appResults';
+import useExperimentResults from '../context/ExperimentContext';
 import { AllSettingsType, useSettings } from '../context/SettingsContext';
 import { run } from './jspsych/experiment';
 
 export const Experiment: FC = () => {
   const jsPsychRef = useRef<null | Promise<JsPsych>>(null);
-  const { configuration, sequencing, duration, language, nextStepSettings } =
-    useSettings();
-  const { mutate: postAppData } = mutations.usePostAppData();
+  const [experimentStarted, setExperimentStarted] = useState<boolean>(false);
+  const [experimentDone, setExperimentDone] = useState<boolean>(false);
+  const settings = useSettings();
+
+  const { status, experimentResultsAppData, setExperimentResult } =
+    useExperimentResults();
 
   const assetPath = {
     images: [
@@ -110,39 +115,76 @@ export const Experiment: FC = () => {
     misc: ['assets/instruction-media - Shortcut.lnk'],
   };
 
-  const onFinish = useCallback(
-    (rawData: DataCollection, settings: AllSettingsType): void => {
-      postAppData({
-        data: { settings, rawData },
-        type: 'a-type',
-      });
-    },
-    [postAppData],
-  );
+  const updateData = (
+    rawData: DataCollection,
+    expSettings: AllSettingsType,
+    expStatus: StatusEnum,
+  ): void => {
+    let responseArray = [];
+    if (experimentResultsAppData && experimentResultsAppData.rawData?.trials) {
+      if (experimentResultsAppData.rawData.trials.length < rawData.count()) {
+        responseArray = rawData.values();
+      } else {
+        responseArray = [
+          ...rawData.values(),
+          ...experimentResultsAppData.rawData.trials.slice(
+            rawData.values().length,
+          ),
+        ];
+      }
+    } else {
+      responseArray = rawData.values();
+    }
+    setExperimentResult({
+      rawData: { trials: responseArray },
+      settings: expSettings,
+      status: expStatus,
+    });
+  };
 
   useEffect(() => {
-    if (!jsPsychRef.current) {
+    if (status === 'success' && !experimentResultsAppData) {
+      setExperimentResult({
+        rawData: { trials: [] },
+        settings,
+        status: StatusEnum.Block1,
+      });
+    } else if (
+      experimentResultsAppData &&
+      experimentResultsAppData?.status !== StatusEnum.Block1 &&
+      !experimentStarted
+    ) {
+      setExperimentDone(true);
+    }
+    if (!jsPsychRef.current && experimentResultsAppData && !experimentDone) {
       jsPsychRef.current = run({
         assetPaths: assetPath,
-        input: {
-          configuration,
-          sequencing,
-          duration,
-          language,
-          nextStepSettings,
-        },
-        environment: '',
-        title: 'Numerosity Experiment on Graasp',
-        version: '0.1',
-        onFinish,
+        input: { settings, results: experimentResultsAppData },
+        onFinish: updateData,
       });
+      setExperimentStarted(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    experimentResultsAppData,
+    setExperimentResult,
+    settings,
+    status,
+    updateData,
+    experimentDone,
+    experimentStarted,
+  ]);
 
-  return (
+  return experimentDone ? (
+    <Stack bgcolor="white">
+      <Typography variant="h5">
+        You have previously completed this experiment. Please reach out to the
+        experimenter
+      </Typography>
+    </Stack>
+  ) : (
     <div className="jspsych-content-outer-wrapper">
-      <div id="jspsych-content" className="jspsych-content-outer" />
+      <div id="jspsych-display-element" className="jspsych-content-outer" />
     </div>
   );
 };

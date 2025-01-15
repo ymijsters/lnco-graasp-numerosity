@@ -1,9 +1,22 @@
 export type SequencingSettings = {
-  content: 'random' | 'objects' | 'people';
+  customize: boolean;
+  firstBlock?: 'persons' | 'objects' | 'random';
+  instructionsFirst?: boolean;
+  secondBlock?: boolean;
+  instructionsSecond?: boolean;
 };
 
 export type DurationSettings = {
   content: number;
+};
+
+export type PhotoDiodeSettings = {
+  usePhotoDiode: 'top-left' | 'top-right' | 'customize' | 'off';
+  photoDiodeLeft?: string;
+  photoDiodeTop?: string;
+  photoDiodeHeight?: string;
+  photoDiodeWidth?: string;
+  testPhotoDiode?: boolean;
 };
 
 export type ConfigurationSettings = {
