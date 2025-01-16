@@ -582,7 +582,7 @@ export async function run({
     timeline.push(
       createButtonPage(i18next.t('firstHalfEnd'), i18next.t('resizeBtn')),
     );
-    if (sequencing.instructionsSecond) {
+    if (sequencing.instructionsSecond || !sequencing.customize) {
       timeline.push(
         groupInstructions(
           jsPsych,

@@ -15,9 +15,7 @@ import Typography from '@mui/material/Typography';
 import { format } from 'date-fns';
 import { DataCollection } from 'jspsych';
 
-import { hooks } from '@/config/queryClient';
-
-import { ExperimentResult } from '../config/appResults';
+import useExperimentResults from '../context/ExperimentContext';
 import ResultsRow from './ResultsRow';
 
 const downloadJson: (json: string, filename: string) => void = (
@@ -36,11 +34,12 @@ const downloadJson: (json: string, filename: string) => void = (
 };
 
 const ResultsView: FC = () => {
-  const { data: appData } = hooks.useAppData<ExperimentResult>();
+  const { allExperimentResultsAppData, deleteExperimentResult } =
+    useExperimentResults();
 
   const allData = (): string => {
     const completeJSON: string[] = [];
-    appData?.forEach((data) => {
+    allExperimentResultsAppData?.forEach((data) => {
       const experimentJSON = data.data.rawData
         ? new DataCollection(data.data.rawData.trials)
         : undefined;
@@ -79,10 +78,11 @@ const ResultsView: FC = () => {
               <TableCell>Number of Blocks</TableCell>
               <TableCell>jsPsych Data Size</TableCell>
               <TableCell>Export</TableCell>
+              <TableCell>Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {appData?.map((data) => {
+            {allExperimentResultsAppData?.map((data) => {
               const rawData = data.data.rawData
                 ? new DataCollection(data.data.rawData.trials)
                 : undefined;
@@ -98,6 +98,7 @@ const ResultsView: FC = () => {
                       `numerosity_${data.creator?.name}_${data.updatedAt}_${format(new Date(), 'yyyyMMdd_HH.mm')}.json`,
                     )
                   }
+                  deleteResult={() => deleteExperimentResult(data.id)}
                 />
               );
             })}

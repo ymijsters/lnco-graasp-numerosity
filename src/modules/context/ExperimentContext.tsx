@@ -120,6 +120,7 @@ export const ExperimentResultsProvider: FC<{
       },
     [deleteAppData, experimentResultsAppData],
   );
+
   const contextValue = useMemo(
     () => ({
       experimentResultsAppData: experimentResultsAppData?.data,
